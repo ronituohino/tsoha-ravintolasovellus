@@ -7,5 +7,18 @@
       <p>Description: {{restaurant.description}}</p>
       <p>Address: {{restaurant.address}}</p>
     </div>
+    <div>
+      <hr>
+      <p>Ratings</p>
+      {% for rating in ratings %}
+        <hr>
+        <div>
+          <p>By: {{rating.username}}</p>
+          <p>Comment: {{rating.comment}}</p>
+          <p>Rating: {{rating.rating}}</p>
+          <p>At: {{rating.made_at}}</p>
+        </div>
+      {% endfor %}
+    </div>
   </body>
 </html>

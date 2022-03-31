@@ -20,10 +20,15 @@ def index():
 
 @app.route("/restaurant/<int:id>")
 def restaurant(id):
-    sql = "SELECT id, name, description, address FROM restaurants WHERE id=:id"
+    sql = "SELECT name, description, address FROM restaurants WHERE id=:id"
     result = db.session.execute(sql, {"id": id})
     restaurant = result.fetchone()
-    return render_template("restaurant.html", restaurant=restaurant)
+
+    sql = "SELECT A.username, comment, rating, made_at FROM ratings R, accounts A WHERE restaurant_id=:id AND R.account_id=A.id"
+    result = db.session.execute(sql, {"id": id})
+    ratings = result.fetchall()
+    print(ratings)
+    return render_template("restaurant.html", restaurant=restaurant, ratings=ratings)
 
 
 @app.route("/favicon.ico")
