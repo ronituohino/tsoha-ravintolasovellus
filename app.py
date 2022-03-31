@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import render_template, request, redirect
-from flask_sqlalchemy import SQLAlchemy
+# Pylance suppressed warning for this import
+from flask_sqlalchemy import SQLAlchemy  # type: ignore
 from os import getenv
 
 app = Flask(__name__)
