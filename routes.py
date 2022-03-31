@@ -65,4 +65,4 @@ def register():
         if account.register(username, password1):
             return redirect("/")
         else:
-            return render_template("error.html", message="Registration ")
+            return render_template("error.html", message="Rekisteröinti epäonnistui, käyttäjänimi on jo käytössä")

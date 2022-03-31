@@ -1,6 +1,7 @@
 from db import db  # type: ignore
 from flask import session
 from werkzeug.security import check_password_hash, generate_password_hash
+from secrets import token_hex
 
 # Defines account functions
 
@@ -13,7 +14,11 @@ def login(username, password):
         return False
     else:
         if check_password_hash(account.password, password):
-            session["account"] = {"id": account.id, "username": username}
+            session["account"] = {
+                "id": account.id,
+                "username": username,
+                "csrf_token": token_hex(16)
+            }
             return True
         else:
             return False
