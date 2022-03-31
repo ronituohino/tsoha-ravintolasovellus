@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS accounts (
 );
 TRUNCATE accounts CASCADE;
 
-INSERT INTO accounts (id, username, password) VALUES (1, 'roni', '123qwe123');
+INSERT INTO accounts (id, username, password) VALUES (1, 'roni', 'eyJ1c2VyX2lkIjo0fQ.YkXZTQ.OfQJaKK1ggG96Nf9V_-a8kuA4EA');
 
 CREATE TABLE IF NOT EXISTS ratings (
   id SERIAL PRIMARY KEY, 

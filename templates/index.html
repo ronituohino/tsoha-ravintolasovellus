@@ -8,6 +8,15 @@
     <link rel="manifest" href="/site.webmanifest">
   </head>
   <body>
+    {% if session.account %}
+    <p>Kirjautunut: {{session.account.username}}</p>
+    <a href="/logout">Kirjaudu ulos</a>
+    {% else %}
+    <a href="/login">Kirjaudu</a>
+    <a href="/register">Rekisteröidy</a>
+    {% endif %}
+
+    
     {% for restaurant in restaurants %}
       <hr>
         <a href="/restaurant/{{restaurant.id}}">
