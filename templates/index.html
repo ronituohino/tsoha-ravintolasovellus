@@ -1,30 +1,13 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Ravintolasovellus</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-  </head>
-  <body>
-    {% if session.account %}
-    <p>Kirjautunut: {{session.account.username}}</p>
-    <a href="/logout">Kirjaudu ulos</a>
-    {% else %}
-    <a href="/login">Kirjaudu</a>
-    <a href="/register">Rekisteröidy</a>
-    {% endif %}
-
-    
-    {% for restaurant in restaurants %}
-      <hr>
-        <a href="/restaurant/{{restaurant.id}}">
-        <div>
-          <p>Nimi: {{restaurant.name}}</p>
-          <p>Kuvaus: {{restaurant.description}}</p>
-          <p>Osoite: {{restaurant.address}}</p>
-        </div>
-    {% endfor %}
-  </body>
-</html>
+{% extends "layout.html" %}
+{% block title %}Etusivu{% endblock %}
+{% block content %}
+  {% for restaurant in restaurants %}
+    <a href="/restaurant/{{restaurant.id}}">
+    <div>
+      <p>Nimi: {{restaurant.name}}</p>
+      <p>Kuvaus: {{restaurant.description}}</p>
+      <p>Osoite: {{restaurant.address}}</p>
+    </div>
+    <hr>
+  {% endfor %}
+{% endblock %}

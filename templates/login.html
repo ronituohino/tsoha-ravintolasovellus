@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html>
-  <body>
-    <form action="/login" method="post">
-      <p>Tunnus: <input type="text" name="username"></p>
-      <p>Salasana: <input type="password" name="password"></p>
-      <input type="submit" value="Kirjaudu">
-    </form>
-    <p>Jos sinulla ei ole tunnusta, voit luoda uuden tunnuksen <a href="/register">tästä</a></p>
-  </body>
-</html>
+{% extends "layout.html" %}
+{% block title %}Kirjaudu{% endblock %}
+{% block content %}
+  <form action="/login" method="post">
+    <p>Tunnus: <input type="text" name="username"></p>
+    <p>Salasana: <input type="password" name="password"></p>
+    <input type="submit" value="Kirjaudu">
+  </form>
+  <p>Jos sinulla ei ole tunnusta, voit luoda uuden tunnuksen <a href="/register">tästä</a></p>
+{% endblock %}

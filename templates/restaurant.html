@@ -1,39 +1,37 @@
-<!DOCTYPE html>
-<html>
-  <title>Ravintolasovellus</title>
-  <body>
-    <div>
-      <p>Nimi: {{restaurant.name}}</p>
-      <p>Kuvaus: {{restaurant.description}}</p>
-      <p>Osoite: {{restaurant.address}}</p>
-    </div>
-    <div>
-      <hr>
-      <p>Arvostelut</p>
-      {% if session.account %}
-      <form id="rating_form" action="/give_rating" method="post">
-        <p>Maximum of 200 characters</p>
-        <p>Rating (1-5): <input type="number" name="rating" min="1" max="5"></p>
-        <input type="hidden" name="csrf_token" value="{{session.account.csrf_token}}">
-        <input type="hidden" name="restaurant_id" value="{{restaurant.id}}">
-        <input type="submit" value="Julkaise">
-      </form>
-      <textarea id="comment_field" rows="4" cols="50" 
-        maxlength="200" form="rating_form" name="comment"></textarea>
-      {% else %}
-      <p>Kirjaudu sisään jättääksesi arvostelun!</p>
-      {% endif %}
-      
+{% extends "layout.html" %}
+{% block title %}{{restaurant.name}}{% endblock %}
+{% block content %}
+  <div>
+    <p>Nimi: {{restaurant.name}}</p>
+    <p>Kuvaus: {{restaurant.description}}</p>
+    <p>Osoite: {{restaurant.address}}</p>
+  </div>
+  <div>
+    <hr>
+    <p>Arvostelut</p>
+    {% if session.account %}
+    <form id="rating_form" action="/give_rating" method="post">
+      <p>Maximum of 200 characters</p>
+      <p>Rating (1-5): <input type="number" name="rating" min="1" max="5"></p>
+      <input type="hidden" name="csrf_token" value="{{session.account.csrf_token}}">
+      <input type="hidden" name="restaurant_id" value="{{restaurant.id}}">
+      <input type="submit" value="Julkaise">
+    </form>
+    <textarea id="comment_field" rows="4" cols="50" 
+      maxlength="200" form="rating_form" name="comment"></textarea>
+    {% else %}
+    <p>Kirjaudu sisään jättääksesi arvostelun!</p>
+    {% endif %}
+    
 
-      {% for rating in ratings %}
-        <hr>
-        <div>
-          <p>Tehnyt: {{rating.username}}</p>
-          <p>Kommentti: {{rating.comment}}</p>
-          <p>Arvostelu: {{rating.rating}}</p>
-          <p>Aika: {{rating.made_at}}</p>
-        </div>
-      {% endfor %}
-    </div>
-  </body>
-</html>
+    {% for rating in ratings %}
+      <hr>
+      <div>
+        <p>Tehnyt: {{rating.username}}</p>
+        <p>Kommentti: {{rating.comment}}</p>
+        <p>Arvostelu: {{rating.rating}}</p>
+        <p>Aika: {{rating.made_at}}</p>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}
