@@ -1,6 +1,7 @@
 # tsoha-ravintolasovellus
 
 Aineopintojen harjoitustyö: [Tietokantasovellus](https://hy-tsoha.github.io/materiaali/)
+Testaa sovellusta [Herokussa!](https://tsoha-2022-ravintolasovellus.herokuapp.com/)
 
 ## Ravintolasovellus
 
