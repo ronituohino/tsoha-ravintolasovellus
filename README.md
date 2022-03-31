@@ -25,9 +25,9 @@ Varmista, että sinulla on asennettuna [PostgreSQL](https://www.postgresql.org/)
 
 Projekti ajetaan Python -virtuaaliympäristössä.  
 Avaa projektin kansio terminaalissa.  
-Aja terminaalissa komento: `python -m venv venv`  
+Aja terminaalissa komento: `python3 -m venv venv`  
 Tämä luo kansioon uuden Python -virtuaaliympäristön.  
-Käynnistä virtuaaliympäristö komennolla: `source/venv/bin/activate`
+Käynnistä virtuaaliympäristö komennolla: `source venv/bin/activate`
 
 ### Riippuvuudet
 
@@ -39,7 +39,7 @@ Nyt projektin riippuvuudet on asennettu.
 
 Projekti käyttää ympäristömuuttujia konfigurointiin.
 Lisää projektin juureen `.env` -niminen tiedosto.  
-Kirjoita tiedostoon sisällöksi seuraavat avaimet, joihin kirjoitat = merkin jälkeen avaimen arvon.  
+Kirjoita tiedostoon sisällöksi seuraavat avaimet, joihin kirjoitat = merkin jälkeen avaimen arvon.
 
 **Avaimet:**  
 DATABASE_URL=[PostgreSQL connection string](https://www.postgresql.org/docs/12/libpq-connect.html#LIBPQ-CONNSTRING)  
@@ -48,7 +48,7 @@ SECRET_KEY=_satunnainen tekstijono_
 Tiedosto näyttää lopuksi kutakuinkin tältä:
 
 ```
-DATABASE_URL=postgresql:///roni  
+DATABASE_URL=postgresql:///roni
 SECRET_KEY=supersalainenavain8fdsajrf78hgv
 ```
 
@@ -61,3 +61,31 @@ Nyt tietokanta on alustettu sovellusta varten.
 ### Käynnistys
 
 Projektin alustamisen jälkeen, sen saa virtuaaliympäristössä käyntiin ajamalla komennon: `flask run`
+
+## Julkaisu
+
+Ohjeet projektin julkaisuun Heroku -alustalle.
+
+### Heroku kirjautuminen
+
+Asenna [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli).  
+Suorita komentoriviltä `heroku login` ja kirjaudu palveluun.
+
+### Sovelluksen luonti
+
+Luo uusi projekti komennolla: `heroku apps:create (nimi)`  
+Liitä projektin git remote Herokuun: `heroku git:remote -a (nimi)`
+
+### Tietokanta Herokussa
+
+Lisää PostgreSQL tietokanta Herokuun: `heroku addons:create heroku-postgresql -a (nimi)`  
+Aja alustuskomennot tietokannalle: `heroku psql -a (nimi) < schema.sql`
+
+### Ympäristömuuttujat Herokussa
+
+Lisää projektin ympäristömuuttujat Herokuun: `heroku config:set SECRET_KEY=(arvo) -a (nimi)`
+
+### Projektin julkaisu
+
+Poista riippuvuus `pkg-resources` requirements.txt -tiedostosta.  
+Puske projekti Herokuun: `git push heroku main`
