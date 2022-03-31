@@ -17,8 +17,6 @@ CREATE TABLE IF NOT EXISTS accounts (
 );
 TRUNCATE accounts CASCADE;
 
-INSERT INTO accounts (id, username, password) VALUES (1, 'roni', 'eyJ1c2VyX2lkIjo0fQ.YkXZTQ.OfQJaKK1ggG96Nf9V_-a8kuA4EA');
-
 CREATE TABLE IF NOT EXISTS ratings (
   id SERIAL PRIMARY KEY, 
   comment TEXT, 
@@ -28,5 +26,3 @@ CREATE TABLE IF NOT EXISTS ratings (
   made_at TIMESTAMP 
 );
 TRUNCATE ratings CASCADE;
-
-INSERT INTO ratings (id, comment, rating, restaurant_id, account_id, made_at) VALUES (1, 'Very good food :)', 4, 1, 1, '2022-03-28');
