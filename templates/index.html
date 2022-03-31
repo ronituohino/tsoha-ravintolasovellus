@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <title>Ravintolasovellus</title>
+  <body>
+    {% for restaurant in restaurants %}
+      <hr>
+        <a href="/restaurant/{{restaurant.id}}">
+        <div>
+          <p>Name: {{restaurant.name}}</p>
+          <p>Description: {{restaurant.description}}</p>
+          <p>Address: {{restaurant.address}}</p>
+        </div>
+    {% endfor %}
+  </body>
+</html>

@@ -10,43 +10,17 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 
-@app.route("/test/index")
+@app.route("/")
 def index():
-    words = ["apina", "banaani", "cembalo"]
-    return render_template("test/index.html", message="Tervetuloa!", items=words)
+    sql = "SELECT id, name, description, address FROM restaurants ORDER BY id DESC"
+    result = db.session.execute(sql)
+    restaurants = result.fetchall()
+    return render_template("index.html", restaurants=restaurants)
 
 
-@app.route("/test/pizza", methods=["POST"])
-def result():
-    pizza = request.form["pizza"]
-    extras = request.form.getlist("extra")
-    message = request.form["message"]
-    return render_template("test/pizza.html", pizza=pizza,
-                           extras=extras,
-                           message=message)
-
-
-@app.route("/test/database")
-def database():
-    result = db.session.execute("SELECT content FROM messages")
-    messages = result.fetchall()
-    return render_template("test/database.html", count=len(messages), messages=messages)
-
-
-@app.route("/test/new")
-def new():
-    return render_template("/test/new.html")
-
-
-@app.route("/test/send", methods=["POST"])
-def send():
-    content = request.form["content"]
-    sql = "INSERT INTO messages (content) VALUES (:content)"
-    db.session.execute(sql, {"content": content})
-    db.session.commit()
-    return redirect("/test/database")
-
-
-@app.route("/test/page/<int:id>")
-def page(id):
-    return "Tämä on sivu " + str(id)
+@app.route("/restaurant/<int:id>")
+def restaurant(id):
+    sql = "SELECT id, name, description, address FROM restaurants WHERE id=:id"
+    result = db.session.execute(sql, {"id": id})
+    restaurant = result.fetchone()
+    return render_template("restaurant.html", restaurant=restaurant)
