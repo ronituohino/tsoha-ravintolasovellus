@@ -41,3 +41,7 @@ def register(username, password):
 
 def account_session():
     return session.get("account", 0)
+
+
+def check_csrf(csrf):
+    return account_session()["csrf_token"] == csrf

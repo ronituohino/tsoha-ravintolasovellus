@@ -2,8 +2,9 @@
 import icon  # type: ignore
 from app import app  # type: ignore
 from db import db  # type: ignore
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, abort
 import account  # type: ignore
+from datetime import datetime
 
 # Defines the main routes for the application
 
@@ -19,17 +20,16 @@ def index():
 
 @app.route("/restaurant/<int:id>")
 def restaurant(id):
-    sql = """SELECT name, description, address
+    sql = """SELECT id, name, description, address
              FROM restaurants WHERE id=:id"""
     result = db.session.execute(sql, {"id": id})
     restaurant = result.fetchone()
 
-    sql = """SELECT A.username, comment, rating, made_at
+    sql = """SELECT R.id, A.username, comment, rating, made_at
              FROM ratings R, accounts A
              WHERE restaurant_id=:id AND R.account_id=A.id"""
     result = db.session.execute(sql, {"id": id})
     ratings = result.fetchall()
-    print(ratings)
     return render_template("restaurant.html", restaurant=restaurant, ratings=ratings)
 
 
@@ -66,3 +66,21 @@ def register():
             return redirect("/")
         else:
             return render_template("error.html", message="Rekisteröinti epäonnistui, käyttäjänimi on jo käytössä")
+
+
+@app.route("/give_rating", methods=["POST"])
+def give_rating():
+    if not account.check_csrf(request.form["csrf_token"]):
+        abort(403)
+
+    comment = request.form["comment"]
+    rating = request.form["rating"]
+    restaurant_id = request.form["restaurant_id"]
+    account_id = account.account_session()["id"]
+    made_at = datetime.now()
+    sql = """INSERT INTO ratings (comment, rating, restaurant_id, account_id, made_at) 
+             VALUES (:comment, :rating, :restaurant_id, :account_id, :made_at)"""
+    db.session.execute(sql, {"comment": comment, "rating": rating,
+                       "restaurant_id": restaurant_id, "account_id": account_id, "made_at": made_at})
+    db.session.commit()
+    return redirect(f"/restaurant/{restaurant_id}")

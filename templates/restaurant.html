@@ -10,6 +10,16 @@
     <div>
       <hr>
       <p>Ratings</p>
+      <form id="rating_form" action="/give_rating" method="post">
+        <p>Maximum of 200 characters</p>
+        <p>Rating (1-5): <input type="number" name="rating" min="1" max="5"></p>
+        <input type="hidden" name="csrf_token" value="{{session.account.csrf_token}}">
+        <input type="hidden" name="restaurant_id" value="{{restaurant.id}}">
+        <input type="submit" value="Julkaise">
+      </form>
+      <textarea id="comment_field" rows="4" cols="50" 
+        maxlength="200" form="rating_form" name="comment"></textarea>
+
       {% for rating in ratings %}
         <hr>
         <div>
