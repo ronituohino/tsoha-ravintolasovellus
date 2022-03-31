@@ -16,6 +16,10 @@
     <a href="/login">Kirjaudu</a>
     <a href="/register">Rekisteröidy</a>
     {% endif %}
+    <form action="/search" method="POST">
+      <input type="search" name="search">
+      <input type="submit" value="Hae">
+    </form>
     <hr>
     {% block content %}{% endblock %}
   </body>

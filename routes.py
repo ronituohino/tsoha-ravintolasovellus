@@ -11,9 +11,19 @@ from datetime import datetime
 
 @app.route("/")
 def index():
-    sql = """SELECT id, name, description, address
-             FROM restaurants ORDER BY id DESC"""
-    result = db.session.execute(sql)
+    has_search = len(request.args) > 0
+    if has_search:
+        search_word = "".join(
+            [f"%{word}%" for word in request.args["search"].split(" ")])
+        sql = """SELECT id, name, description, address
+                 FROM restaurants WHERE name ILIKE :search OR description ILIKE :search 
+                 ORDER BY id DESC"""
+        print(search_word)
+        result = db.session.execute(sql, {"search": search_word})
+    else:
+        sql = """SELECT id, name, description, address
+                 FROM restaurants ORDER BY id DESC"""
+        result = db.session.execute(sql)
     restaurants = result.fetchall()
     return render_template("index.html", restaurants=restaurants)
 
@@ -50,6 +60,15 @@ def login():
 def logout():
     account.logout()
     return redirect("/")
+
+
+@app.route("/search", methods=["POST"])
+def search():
+    search_word = request.form["search"]
+    if len(search_word) > 0:
+        return redirect(f"/?search={search_word}")
+    else:
+        return redirect("/")
 
 
 @app.route("/register", methods=["GET", "POST"])

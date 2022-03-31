@@ -6,11 +6,11 @@ Aineopintojen harjoitustyö: [Tietokantasovellus](https://hy-tsoha.github.io/mat
 
 Sovelluksessa näkyy tietyn alueen ravintolat, joista voi etsiä tietoa ja lukea arvioita. Jokainen käyttäjä on peruskäyttäjä tai ylläpitäjä.
 
-- [ ] Käyttäjä voi kirjautua sisään ja ulos sekä luoda uuden tunnuksen
+- [x] Käyttäjä voi kirjautua sisään ja ulos sekä luoda uuden tunnuksen
 - [ ] Käyttäjä näkee ravintolat kartalla ja voi painaa ravintolasta, jolloin siitä näytetään lisää tietoa (kuten kuvaus ja aukioloajat)
-- [ ] Käyttäjä voi antaa arvion (tähdet ja kommentti) ravintolasta ja lukea muiden antamia arvioita
+- [x] Käyttäjä voi antaa arvion (tähdet ja kommentti) ravintolasta ja lukea muiden antamia arvioita
 - [ ] Ylläpitäjä voi lisätä ja poistaa ravintoloita sekä määrittää ravintolasta näytettävät tiedot
-- [ ] Käyttäjä voi etsiä kaikki ravintolat, joiden kuvauksessa on annettu sana
+- [x] Käyttäjä voi etsiä kaikki ravintolat, joiden kuvauksessa on annettu sana
 - [ ] Käyttäjä näkee myös listan, jossa ravintolat on järjestetty parhaimmasta huonoimpaan arvioiden mukaisesti
 - [ ] Ylläpitäjä voi tarvittaessa poistaa käyttäjän antaman arvion
 - [ ] Ylläpitäjä voi luoda ryhmiä, joihin ravintoloita voi luokitella. Ravintola voi kuulua yhteen tai useampaan ryhmään
@@ -42,8 +42,8 @@ Lisää projektin juureen `.env` -niminen tiedosto.
 Kirjoita tiedostoon sisällöksi seuraavat avaimet, joihin kirjoitat = merkin jälkeen avaimen arvon.
 
 **Avaimet:**  
-DATABASE_URL=[PostgreSQL connection string](https://www.postgresql.org/docs/12/libpq-connect.html#LIBPQ-CONNSTRING)  
-SECRET_KEY=_satunnainen tekstijono_
+DATABASE*URL=[PostgreSQL connection string](https://www.postgresql.org/docs/12/libpq-connect.html#LIBPQ-CONNSTRING)  
+SECRET_KEY=\_satunnainen tekstijono*
 
 Tiedosto näyttää lopuksi kutakuinkin tältä:
 
