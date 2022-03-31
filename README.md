@@ -25,37 +25,37 @@ Varmista, että sinulla on asennettuna [PostgreSQL](https://www.postgresql.org/)
 
 Projekti ajetaan Python -virtuaaliympäristössä.  
 Avaa projektin kansio terminaalissa.  
-Aja terminaalissa komento: `python -m venv venv`.  
+Aja terminaalissa komento: `python -m venv venv`  
 Tämä luo kansioon uuden Python -virtuaaliympäristön.  
 Käynnistä virtuaaliympäristö komennolla: `source/venv/bin/activate`
 
 ### Riippuvuudet
 
 Virtuaaliympäristöön täytyy seuraavaksi asentaa projektin riippuvuudet.  
-Aja terminaalissa komento: `pip install -r requirements.txt`.  
+Aja terminaalissa komento: `pip install -r requirements.txt`  
 Nyt projektin riippuvuudet on asennettu.
 
 ### .env -tiedosto
 
 Projekti käyttää ympäristömuuttujia konfigurointiin.
 Lisää projektin juureen `.env` -niminen tiedosto.  
-Kirjoita tiedostoon sisällöksi seuraavat avaimet, joihin korvaat <> -sisällön avaimen arvolla.
+Kirjoita tiedostoon sisällöksi seuraavat avaimet, joihin kirjoitat = merkin jälkeen avaimen arvon.  
 
 **Avaimet:**  
-DATABASE*URL=[PostgreSQL connection string](https://www.postgresql.org/docs/12/libpq-connect.html#LIBPQ-CONNSTRING)
-SECRET_KEY=\_satunnainen tekstijono*
+DATABASE_URL=[PostgreSQL connection string](https://www.postgresql.org/docs/12/libpq-connect.html#LIBPQ-CONNSTRING)  
+SECRET_KEY=_satunnainen tekstijono_
 
 Tiedosto näyttää lopuksi kutakuinkin tältä:
 
 ```
-DATABASE_URL=postgresql:///roni
+DATABASE_URL=postgresql:///roni  
 SECRET_KEY=supersalainenavain8fdsajrf78hgv
 ```
 
 ### Tietokanta
 
 Projekti käyttää PostgreSQL -tietokantaa.  
-Aja terminaalissa komento: `psql < schema.sql`.  
+Aja terminaalissa komento: `psql < schema.sql`  
 Nyt tietokanta on alustettu sovellusta varten.
 
 ### Käynnistys
