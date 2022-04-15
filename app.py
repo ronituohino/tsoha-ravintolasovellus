@@ -1,4 +1,3 @@
-# Pylance suppressed warnings for imports
 from flask import Flask
 from os import getenv
 
@@ -8,4 +7,4 @@ from os import getenv
 app = Flask(__name__)
 app.secret_key = getenv("SECRET_KEY")
 
-import routes  # type: ignore
+import routes

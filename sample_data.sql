@@ -25,7 +25,8 @@ SELECT setval(pg_get_serial_sequence('restaurant_group_connections', 'id'), (SEL
 
 INSERT INTO accounts (id, username, password, admin, made_at)
 VALUES
-  (1, 'roni', 'pbkdf2:sha256:260000$yfRtUjpV1tK39JWc$a52eaf9edbfe2a59d9e5619136121a39ab074a541f134472f354d5a1ef1aa34f', TRUE, '2021-12-13 14:15:16'),
-  (2, 'jare', 'pbkdf2:sha256:260000$yfRtUjpV1tK39JWc$a52eaf9edbfe2a59d9e5619136121a39ab074a541f134472f354d5a1ef1aa34f', FALSE, '2022-04-04 14:44:44');
+  (1, 'roni', 'pbkdf2:sha256:260000$yfRtUjpV1tK39JWc$a52eaf9edbfe2a59d9e5619136121a39ab074a541f134472f354d5a1ef1aa34f', TRUE, '2021-12-13 16:15:16'),
+  (2, 'jare', 'pbkdf2:sha256:260000$yfRtUjpV1tK39JWc$a52eaf9edbfe2a59d9e5619136121a39ab074a541f134472f354d5a1ef1aa34f', FALSE, '2022-04-04 14:44:44'),
+  (3, 'alex', 'pbkdf2:sha256:260000$yfRtUjpV1tK39JWc$a52eaf9edbfe2a59d9e5619136121a39ab074a541f134472f354d5a1ef1aa34f', FALSE, '2022-05-13 12:56:02');
 
 SELECT setval(pg_get_serial_sequence('accounts', 'id'), (SELECT MAX(id) from accounts));

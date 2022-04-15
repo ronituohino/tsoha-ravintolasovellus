@@ -1,6 +1,5 @@
-# Pylance suppressed warnings for imports
-from app import app  # type: ignore
-from flask_sqlalchemy import SQLAlchemy  # type: ignore
+from app import app
+from flask_sqlalchemy import SQLAlchemy
 from os import getenv
 
 # Initializes the PostgreSQL database

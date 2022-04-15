@@ -5,6 +5,24 @@
     <p>Nimi: {{restaurant.name}}</p>
     <p>Kuvaus: {{restaurant.description}}</p>
     <p>Osoite: {{restaurant.address}}</p>
+
+    <ul>
+      {% for group in groups %}
+        {% if group.restaurant_id == restaurant.id %}
+          <li>{{group.name}}</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+
+    <hr>
+
+    {% if session.account.admin %}
+      <form id="delete_restaurant_form" action="/delete_restaurant" method="post">
+        <input type="hidden" name="csrf_token" value="{{session.account.csrf_token}}">
+        <input type="hidden" name="restaurant_id" value="{{restaurant.id}}">
+        <input type="submit" value="Poista ravintola">
+      </form>
+    {% endif %}
   </div>
   <div>
     <hr>
@@ -30,6 +48,15 @@
         <p>Kommentti: {{rating.comment}}</p>
         <p>Arvostelu: {{rating.rating}}</p>
         <p>Aika: {{rating.made_at}}</p>
+
+        {% if session.account.admin or session.account.id == rating.account_id %}
+          <form id="delete_rating_form" action="/delete_rating" method="post">
+            <input type="hidden" name="csrf_token" value="{{session.account.csrf_token}}">
+            <input type="hidden" name="restaurant_id" value="{{restaurant.id}}">
+            <input type="hidden" name="rating_id" value="{{rating.id}}">
+            <input type="submit" value="Poista arvostelu">
+          </form>
+        {% endif %}
       </div>
     {% endfor %}
   </div>

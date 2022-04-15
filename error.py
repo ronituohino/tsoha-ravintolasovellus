@@ -1,6 +1,6 @@
 from flask import render_template
 
-# A single function to render the error page with message
+# A single function to render the error page with given message
 
 
 def error(message):
