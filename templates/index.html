@@ -7,6 +7,13 @@
       <p>Nimi: {{restaurant.name}}</p>
       <p>Kuvaus: {{restaurant.description}}</p>
       <p>Osoite: {{restaurant.address}}</p>
+      <ul>
+        {% for group in groups %}
+          {% if group.restaurant_id == restaurant.id %}
+            <li>{{group.name}}</li>
+          {% endif %}
+        {% endfor %}
+      </ul>
     </div>
     <hr>
   {% endfor %}

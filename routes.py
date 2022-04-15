@@ -20,14 +20,21 @@ def index():
         sql = """SELECT id, name, description, address
                  FROM restaurants WHERE name ILIKE :search OR description ILIKE :search 
                  ORDER BY id DESC"""
-        print(search_word)
         result = db.session.execute(sql, {"search": search_word})
     else:
         sql = """SELECT id, name, description, address
                  FROM restaurants ORDER BY id DESC"""
         result = db.session.execute(sql)
+
     restaurants = result.fetchall()
-    return render_template("index.html", restaurants=restaurants)
+    id_list = [restaurant.id for restaurant in restaurants]
+
+    # Get group names as a list with restaurant id's
+    sql = """SELECT C.restaurant_id, G.name FROM groups G, restaurant_group_connections C WHERE C.restaurant_id=ANY(:id_list) AND C.group_id=G.id"""
+    result = db.session.execute(sql, {"id_list": id_list})
+    groups = result.fetchall()
+
+    return render_template("index.html", restaurants=restaurants, groups=groups)
 
 
 @app.route("/restaurant/<int:id>")
