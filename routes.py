@@ -128,11 +128,15 @@ def admin_create_restaurant():
         if not account.require_admin():
             return error("Vaaditaan ylläpitäjä")
         else:
-            return render_template("admin_create_restaurant.html")
+            sql = """SELECT id, name FROM groups"""
+            result = db.session.execute(sql)
+            groups = result.fetchall()
+            return render_template("admin_create_restaurant.html", groups=groups)
     if request.method == "POST":
         if not account.check_csrf(request.form["csrf_token"]):
             abort(403)
 
+        # Create restaurant
         name = request.form["name"]
         description = request.form["description"]
         address = request.form["address"]
@@ -151,7 +155,39 @@ def admin_create_restaurant():
                 "made_at": made_at,
             },
         )
+        restaurant_id = result.fetchone()[0]
+
+        # Create group listings
+        groups = request.form.getlist("groups")
+        for group in groups:
+            sql = """INSERT INTO restaurant_group_connections (restaurant_id, group_id) VALUES (:restaurant_id, :group_id)"""
+            db.session.execute(
+                sql, {"group_id": int(group), "restaurant_id": restaurant_id}
+            )
+
+        db.session.commit()
+        return redirect(f"/restaurant/{restaurant_id}")
+
+
+@app.route("/create_group", methods=["GET", "POST"])
+def admin_create_group():
+    if request.method == "GET":
+        if not account.require_admin():
+            return error("Vaaditaan ylläpitäjä")
+        else:
+            return render_template("admin_create_group.html")
+    if request.method == "POST":
+        if not account.check_csrf(request.form["csrf_token"]):
+            abort(403)
+
+        name = request.form["name"]
+        sql = """INSERT INTO groups (name) VALUES (:name)"""
+        result = db.session.execute(
+            sql,
+            {
+                "name": name,
+            },
+        )
         db.session.commit()
 
-        restaurant_id = result.fetchone()[0]
-        return redirect(f"/restaurant/{restaurant_id}")
+        return redirect("/")

@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block title %}Luo ravintola{% endblock %}
+{% block content %}
+  <form id="create_group" action="/create_group" method="post">
+    <p>Nimi: <input type="text" name="name" max="200"></p>
+    <input type="hidden" name="csrf_token" value="{{session.account.csrf_token}}">
+    <input type="submit" value="Luo">
+  </form>
+{% endblock %}

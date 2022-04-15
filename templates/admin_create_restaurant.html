@@ -7,6 +7,10 @@
     <p>Osoite: <input type="text" name="address" max="500"></p>
     <p>Numero: <input type="text" name="phone" max="500"></p>
     <input type="hidden" name="csrf_token" value="{{session.account.csrf_token}}">
+
+    {% for group in groups %}
+      <p><input type="checkbox" name="groups" value="{{group.id}}"> {{group.name}}</p>
+    {% endfor %}
     <input type="submit" value="Luo">
   </form>
 {% endblock %}
