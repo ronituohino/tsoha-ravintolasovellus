@@ -1,0 +1,4 @@
+#top-bar-items {
+  display: flex;
+  gap: 15px;
+}

@@ -6,24 +6,24 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
   </head>
   <body>
-    <a href="/">Kotisivu</a>
-    {% if session.account %}
-      <div>
-        <p>Kirjautunut: {{session.account.username}}</p>
+    <div id="top-bar-items">
+      <a href="/">Kotisivu</a>
+      {% if session.account %}
+        <a>Kirjautunut: {{session.account.username}}</a>
         <a href="/logout">Kirjaudu ulos</a>
 
-          {% if session.account.admin %}
-            <a href="/create_restaurant">Luo ravintola</a>
-            <a href="/create_group">Luo ryhmä</a>
-          {% endif %}
-
-        {% else %}
+        {% if session.account.admin %}
+          <a href="/create_restaurant">Luo ravintola</a>
+          <a href="/create_group">Luo ryhmä</a>
+        {% endif %}
+      {% else %}
         <a href="/login">Kirjaudu</a>
         <a href="/register">Rekisteröidy</a>
-      </div>
-    {% endif %}
+      {% endif %}
+    </div>
     <form action="/search" method="POST">
       <input type="search" name="search">
       <input type="submit" value="Hae">
