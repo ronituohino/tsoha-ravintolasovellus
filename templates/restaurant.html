@@ -16,7 +16,7 @@
 
     <hr>
 
-    {% if session.account.admin %}
+    {% if session.account and session.account.admin %}
       <form id="delete_restaurant_form" action="/delete_restaurant" method="post">
         <input type="hidden" name="csrf_token" value="{{session.account.csrf_token}}">
         <input type="hidden" name="restaurant_id" value="{{restaurant.id}}">
@@ -49,7 +49,7 @@
         <p>Arvostelu: {{rating.rating}}</p>
         <p>Aika: {{rating.made_at}}</p>
 
-        {% if session.account.admin or session.account.id == rating.account_id %}
+        {% if session.account and session.account.admin or session.account.id == rating.account_id %}
           <form id="delete_rating_form" action="/delete_rating" method="post">
             <input type="hidden" name="csrf_token" value="{{session.account.csrf_token}}">
             <input type="hidden" name="restaurant_id" value="{{restaurant.id}}">

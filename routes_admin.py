@@ -4,6 +4,7 @@ from flask import render_template, request, redirect, abort
 import account
 from error import error
 from datetime import datetime
+import validation
 
 # Defines the admin routes for the application
 
@@ -28,6 +29,19 @@ def admin_create_restaurant():
         address = request.form["address"]
         phone = request.form["phone"]
         made_at = datetime.now()
+
+        # Validation
+        v = validation.Validator()
+        v.check(v.not_empty("nimi", name))
+        v.check(v.has_length_less_than("nimi", name, 50))
+        v.check(v.not_empty("kuvaus", description))
+        v.check(v.has_length_less_than("kuvaus", description, 200))
+        v.check(v.not_empty("osoite", address))
+        v.check(v.has_length_less_than("osoite", address, 50))
+        v.check(v.not_empty("puhelinnumero", phone))
+        v.check(v.has_length_less_than("puhelinnumero", phone, 12))
+        if v.has_errors():
+            return error(str(v))
 
         sql = """INSERT INTO restaurants (name, description, address, phone, made_at) 
                 VALUES (:name, :description, :address, :phone, :made_at) RETURNING id"""
@@ -82,6 +96,14 @@ def admin_create_group():
             abort(403)
 
         name = request.form["name"]
+
+        # Validation
+        v = validation.Validator()
+        v.check(v.not_empty("nimi", name))
+        v.has_length_less_than("nimi", name, 50)
+        if v.has_errors():
+            return error(str(v))
+
         sql = """INSERT INTO groups (name) VALUES (:name)"""
         result = db.session.execute(
             sql,

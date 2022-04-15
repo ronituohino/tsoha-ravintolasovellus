@@ -6,6 +6,7 @@ import account
 from restaurant import get_groups
 from error import error
 from datetime import datetime
+import validation
 
 # Defines the main routes for the application
 
@@ -60,6 +61,16 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
+
+        # Validation
+        v = validation.Validator()
+        v.check(v.not_empty("Käyttäjänimi", username))
+        v.check(v.has_length_more_than("Käyttäjänimi", username, 3))
+        v.check(v.not_empty("Salasana", password))
+        v.check(v.has_length_more_than("Salasana", password, 5))
+        if v.has_errors():
+            return error(str(v))
+
         if account.login(username, password):
             return redirect("/")
         else:
@@ -86,15 +97,27 @@ def register():
     if request.method == "GET":
         return render_template("register.html")
     if request.method == "POST":
+
         username = request.form["username"]
         password1 = request.form["password1"]
         password2 = request.form["password2"]
+
+        # Validation
+        v = validation.Validator()
+        v.check(v.not_empty("käyttäjänimi", username))
+        v.check(v.has_length_more_than("käyttäjänimi", username, 3))
+        v.check(v.not_empty("salasana", password1))
+        v.check(v.has_length_more_than("salasana", password1, 5))
+        v.check(v.not_empty("salasana (uudestaan)", password2))
+        if v.has_errors():
+            return error(str(v))
+
         if password1 != password2:
             return error("Salasanat eroavat")
         if account.register(username, password1):
             return redirect("/")
         else:
-            return error("Rekisteröinti epäonnistui, käyttäjänimi on jo käytössä")
+            return error("Rekisteröinti epäonnistui, koska käyttäjänimi on jo käytössä")
 
 
 @app.route("/give_rating", methods=["POST"])
@@ -106,7 +129,20 @@ def give_rating():
     rating = request.form["rating"]
     restaurant_id = request.form["restaurant_id"]
     account_id = account.account_session()["id"]
+
+    # Validation
+    v = validation.Validator()
+    v.check(v.not_empty("kommentti", comment))
+    v.check(v.has_length_less_than("Kommentti", comment, 200))
+    v.check(v.not_empty("arvostelu", rating))
+    v.check(v.is_value_between("Arvostelu", rating, 1, 5))
+    v.check(v.not_empty("ravintola ID", restaurant_id))
+    v.check(v.not_empty("käyttäjä ID", account_id))
+    if v.has_errors():
+        return error(str(v))
+
     made_at = datetime.now()
+
     sql = """INSERT INTO ratings (comment, rating, restaurant_id, account_id, made_at) 
              VALUES (:comment, :rating, :restaurant_id, :account_id, :made_at)"""
     db.session.execute(
@@ -130,6 +166,13 @@ def delete_rating():
 
     rating_id = request.form["rating_id"]
 
+    # Validation
+    v = validation.Validator()
+    v.check(v.not_empty("arvostelu ID", rating_id))
+    if v.has_errors():
+        return error(str(v))
+
+    # Ratings can be deleted by admins, or by the user that made the rating
     if not account.require_admin():
         sql = """SELECT account_id FROM ratings WHERE id=:rating_id"""
         result = db.session.execute(sql, {"rating_id": rating_id})
@@ -139,6 +182,11 @@ def delete_rating():
             return error("Vaaditaan ylläpitäjä")
 
     restaurant_id = request.form["restaurant_id"]
+
+    # Validation
+    v.check(v.not_empty("ravintola ID", restaurant_id))
+    if v.has_errors():
+        return error(str(v))
 
     sql = """DELETE FROM ratings WHERE id=:rating_id"""
     db.session.execute(sql, {"rating_id": rating_id})

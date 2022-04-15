@@ -10,17 +10,19 @@
   <body>
     <a href="/">Kotisivu</a>
     {% if session.account %}
-      <p>Kirjautunut: {{session.account.username}}</p>
-      <a href="/logout">Kirjaudu ulos</a>
+      <div>
+        <p>Kirjautunut: {{session.account.username}}</p>
+        <a href="/logout">Kirjaudu ulos</a>
 
-        {% if session.account.admin %}
-          <a href="/create_restaurant">Luo ravintola</a>
-          <a href="/create_group">Luo ryhmä</a>
-        {% endif %}
+          {% if session.account.admin %}
+            <a href="/create_restaurant">Luo ravintola</a>
+            <a href="/create_group">Luo ryhmä</a>
+          {% endif %}
 
-      {% else %}
-      <a href="/login">Kirjaudu</a>
-      <a href="/register">Rekisteröidy</a>
+        {% else %}
+        <a href="/login">Kirjaudu</a>
+        <a href="/register">Rekisteröidy</a>
+      </div>
     {% endif %}
     <form action="/search" method="POST">
       <input type="search" name="search">
