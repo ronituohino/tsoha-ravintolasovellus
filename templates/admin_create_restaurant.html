@@ -5,7 +5,7 @@
     <p>Nimi: <input type="text" name="name" max="50"></p>
     <p>Kuvaus: <input type="text" name="description" max="200"></p>
     <p>Osoite: <input type="text" name="address" max="50"></p>
-    <p>Numero: <input type="number" name="phone" max="12"></p>
+    <p>Numero: <input type="number" name="phone" minlength="9" maxlength="12"></p>
     <input type="hidden" name="csrf_token" value="{{session.account.csrf_token}}">
 
     {% for group in groups %}
