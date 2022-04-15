@@ -44,7 +44,7 @@ def restaurant(id):
     result = db.session.execute(sql, {"id": id})
     restaurant = result.fetchone()
 
-    sql = """SELECT R.id, A.username, comment, rating, made_at
+    sql = """SELECT R.id, A.username, comment, rating, R.made_at
              FROM ratings R, accounts A
              WHERE restaurant_id=:id AND R.account_id=A.id"""
     result = db.session.execute(sql, {"id": id})
@@ -122,9 +122,36 @@ def give_rating():
     return redirect(f"/restaurant/{restaurant_id}")
 
 
-@app.route("/test_admin", methods=["GET"])
-def test_admin():
-    if not account.require_admin():
-        return error("Vaaditaan ylläpitäjä")
-    else:
-        return render_template("admin_create_restaurant.html")
+@app.route("/create_restaurant", methods=["GET", "POST"])
+def admin_create_restaurant():
+    if request.method == "GET":
+        if not account.require_admin():
+            return error("Vaaditaan ylläpitäjä")
+        else:
+            return render_template("admin_create_restaurant.html")
+    if request.method == "POST":
+        if not account.check_csrf(request.form["csrf_token"]):
+            abort(403)
+
+        name = request.form["name"]
+        description = request.form["description"]
+        address = request.form["address"]
+        phone = request.form["phone"]
+        made_at = datetime.now()
+
+        sql = """INSERT INTO restaurants (name, description, address, phone, made_at) 
+                VALUES (:name, :description, :address, :phone, :made_at) RETURNING id"""
+        result = db.session.execute(
+            sql,
+            {
+                "name": name,
+                "description": description,
+                "address": address,
+                "phone": phone,
+                "made_at": made_at,
+            },
+        )
+        db.session.commit()
+
+        restaurant_id = result.fetchone()[0]
+        return redirect(f"/restaurant/{restaurant_id}")

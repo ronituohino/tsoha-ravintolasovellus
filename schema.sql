@@ -4,7 +4,8 @@ CREATE TABLE restaurants (
   name TEXT, 
   description TEXT, 
   address TEXT,
-  phone TEXT
+  phone TEXT,
+  made_at TIMESTAMP
 );
 
 DROP TABLE IF EXISTS groups CASCADE;
@@ -25,7 +26,8 @@ CREATE TABLE accounts (
   id SERIAL PRIMARY KEY, 
   username TEXT UNIQUE, 
   password TEXT,
-  admin BOOLEAN
+  admin BOOLEAN,
+  made_at TIMESTAMP
 );
 
 DROP TABLE IF EXISTS ratings CASCADE;

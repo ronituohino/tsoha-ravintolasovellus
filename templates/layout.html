@@ -10,11 +10,16 @@
   <body>
     <a href="/">Kotisivu</a>
     {% if session.account %}
-    <p>Kirjautunut: {{session.account.username}}</p>
-    <a href="/logout">Kirjaudu ulos</a>
-    {% else %}
-    <a href="/login">Kirjaudu</a>
-    <a href="/register">Rekisteröidy</a>
+      <p>Kirjautunut: {{session.account.username}}</p>
+      <a href="/logout">Kirjaudu ulos</a>
+
+        {% if session.account.admin %}
+          <a href="/create_restaurant">Luo ravintola</a>
+        {% endif %}
+
+      {% else %}
+      <a href="/login">Kirjaudu</a>
+      <a href="/register">Rekisteröidy</a>
     {% endif %}
     <form action="/search" method="POST">
       <input type="search" name="search">
