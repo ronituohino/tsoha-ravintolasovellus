@@ -1,23 +1,35 @@
-CREATE TABLE IF NOT EXISTS restaurants (
+DROP TABLE IF EXISTS restaurants CASCADE;
+CREATE TABLE restaurants (
   id SERIAL PRIMARY KEY, 
   name TEXT, 
   description TEXT, 
-  address TEXT
+  address TEXT,
+  phone TEXT
 );
-TRUNCATE restaurants CASCADE;
 
-INSERT INTO restaurants (id, name, description, address) VALUES (1, 'Levant', 'Levant restaurants offers middle Eastern food ( Syrian/ Lebanese )', 'Bulevardi 15, Helsinki 00120');
-INSERT INTO restaurants (id, name, description, address) VALUES (2, 'Ravintola Nerone', 'Italian, Pizza, Mediterranean', 'Pursimiehenkatu 27, Helsinki 00150');
-INSERT INTO restaurants (id, name, description, address) VALUES (3, 'Shelter', 'European, Scandinavian', 'Kanavaranta 7, Helsinki 00160');
+DROP TABLE IF EXISTS groups CASCADE;
+CREATE TABLE groups (
+  id SERIAL PRIMARY KEY,
+  name TEXT
+);
 
-CREATE TABLE IF NOT EXISTS accounts (
+DROP TABLE IF EXISTS restaurant_group_connections CASCADE;
+CREATE TABLE restaurant_group_connections (
+  id SERIAL PRIMARY KEY,
+  restaurant_id INTEGER REFERENCES restaurants,
+  group_id INTEGER REFERENCES groups
+);
+
+DROP TABLE IF EXISTS accounts CASCADE;
+CREATE TABLE accounts (
   id SERIAL PRIMARY KEY, 
   username TEXT UNIQUE, 
-  password TEXT
+  password TEXT,
+  admin BOOLEAN
 );
-TRUNCATE accounts CASCADE;
 
-CREATE TABLE IF NOT EXISTS ratings (
+DROP TABLE IF EXISTS ratings CASCADE;
+CREATE TABLE ratings (
   id SERIAL PRIMARY KEY, 
   comment TEXT, 
   rating INTEGER, 
@@ -25,4 +37,3 @@ CREATE TABLE IF NOT EXISTS ratings (
   account_id INTEGER REFERENCES accounts,
   made_at TIMESTAMP 
 );
-TRUNCATE ratings CASCADE;

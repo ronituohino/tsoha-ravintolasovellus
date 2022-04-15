@@ -4,6 +4,7 @@ from app import app  # type: ignore
 from db import db  # type: ignore
 from flask import render_template, request, redirect, abort
 import account  # type: ignore
+from error import error
 from datetime import datetime
 
 # Defines the main routes for the application
@@ -14,7 +15,8 @@ def index():
     has_search = len(request.args) > 0
     if has_search:
         search_word = "".join(
-            [f"%{word}%" for word in request.args["search"].split(" ")])
+            [f"%{word}%" for word in request.args["search"].split(" ")]
+        )
         sql = """SELECT id, name, description, address
                  FROM restaurants WHERE name ILIKE :search OR description ILIKE :search 
                  ORDER BY id DESC"""
@@ -53,7 +55,7 @@ def login():
         if account.login(username, password):
             return redirect("/")
         else:
-            return render_template("error.html", message="Väärä tunnus tai salasana")
+            return error("Väärä tunnus tai salasana")
 
 
 @app.route("/logout")
@@ -80,11 +82,11 @@ def register():
         password1 = request.form["password1"]
         password2 = request.form["password2"]
         if password1 != password2:
-            return render_template("error.html", message="Salasanat eroavat")
+            return error("Salasanat eroavat")
         if account.register(username, password1):
             return redirect("/")
         else:
-            return render_template("error.html", message="Rekisteröinti epäonnistui, käyttäjänimi on jo käytössä")
+            return error("Rekisteröinti epäonnistui, käyttäjänimi on jo käytössä")
 
 
 @app.route("/give_rating", methods=["POST"])
@@ -99,7 +101,23 @@ def give_rating():
     made_at = datetime.now()
     sql = """INSERT INTO ratings (comment, rating, restaurant_id, account_id, made_at) 
              VALUES (:comment, :rating, :restaurant_id, :account_id, :made_at)"""
-    db.session.execute(sql, {"comment": comment, "rating": rating,
-                       "restaurant_id": restaurant_id, "account_id": account_id, "made_at": made_at})
+    db.session.execute(
+        sql,
+        {
+            "comment": comment,
+            "rating": rating,
+            "restaurant_id": restaurant_id,
+            "account_id": account_id,
+            "made_at": made_at,
+        },
+    )
     db.session.commit()
     return redirect(f"/restaurant/{restaurant_id}")
+
+
+@app.route("/test_admin", methods=["GET"])
+def test_admin():
+    if not account.require_admin():
+        return error("Vaaditaan ylläpitäjä")
+    else:
+        return render_template("admin_create_restaurant.html")

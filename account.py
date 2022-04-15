@@ -7,7 +7,7 @@ from secrets import token_hex
 
 
 def login(username, password):
-    sql = "SELECT id, password FROM accounts WHERE username=:username"
+    sql = "SELECT id, password, admin FROM accounts WHERE username=:username"
     result = db.session.execute(sql, {"username": username})
     account = result.fetchone()
     if not account:
@@ -17,7 +17,8 @@ def login(username, password):
             session["account"] = {
                 "id": account.id,
                 "username": username,
-                "csrf_token": token_hex(16)
+                "csrf_token": token_hex(16),
+                "admin": account.admin,
             }
             return True
         else:
@@ -45,3 +46,10 @@ def account_session():
 
 def check_csrf(csrf):
     return account_session()["csrf_token"] == csrf
+
+
+def require_admin():
+    account = account_session()
+    if account:
+        return account_session()["admin"] == True
+    return False
