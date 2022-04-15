@@ -43,8 +43,8 @@ Lisää projektin juureen `.env` -niminen tiedosto.
 Kirjoita tiedostoon sisällöksi seuraavat avaimet, joihin kirjoitat = merkin jälkeen avaimen arvon.
 
 **Avaimet:**  
-DATABASE*URL=[PostgreSQL connection string](https://www.postgresql.org/docs/12/libpq-connect.html#LIBPQ-CONNSTRING)  
-SECRET_KEY=\_satunnainen tekstijono*
+DATABASE_URL=[PostgreSQL connection string](https://www.postgresql.org/docs/12/libpq-connect.html#LIBPQ-CONNSTRING)  
+SECRET_KEY=satunnainen tekstijono
 
 Tiedosto näyttää lopuksi kutakuinkin tältä:
 
