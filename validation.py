@@ -1,6 +1,3 @@
-from error import error
-
-
 class Validator:
     def __init__(self):
         self.errors = []

@@ -1,8 +1,7 @@
 from app import app
 from db import db
-from flask import render_template, request, redirect, abort
+from flask import render_template, request, redirect, abort, flash
 import account
-from error import error
 from datetime import datetime
 import validation
 
@@ -13,7 +12,8 @@ import validation
 def admin_create_restaurant():
     if request.method == "GET":
         if not account.require_admin():
-            return error("Vaaditaan ylläpitäjä")
+            flash("Vaaditaan ylläpitäjä")
+            return redirect("/")
         else:
             sql = """SELECT id, name FROM groups"""
             result = db.session.execute(sql)
@@ -41,7 +41,8 @@ def admin_create_restaurant():
         v.check(v.not_empty("puhelinnumero", phone))
         v.check(v.has_length_less_than("puhelinnumero", phone, 12))
         if v.has_errors():
-            return error(str(v))
+            flash(str(v))
+            return redirect("/create_restaurant")
 
         sql = """INSERT INTO restaurants (name, description, address, phone, made_at) 
                 VALUES (:name, :description, :address, :phone, :made_at) RETURNING id"""
@@ -71,13 +72,15 @@ def admin_create_restaurant():
 
 @app.route("/delete_restaurant", methods=["POST"])
 def admin_delete_restaurant():
+    restaurant_id = request.form["restaurant_id"]
+
     if not account.require_admin():
-        return error("Vaaditaan ylläpitäjä")
+        flash("Vaaditaan ylläpitäjä")
+        return redirect(f"/restaurants/{restaurant_id}")
 
     if not account.check_csrf(request.form["csrf_token"]):
         abort(403)
 
-    restaurant_id = request.form["restaurant_id"]
     sql = """DELETE FROM restaurants WHERE id=:restaurant_id"""
     db.session.execute(sql, {"restaurant_id": restaurant_id})
     db.session.commit()
@@ -88,7 +91,8 @@ def admin_delete_restaurant():
 def admin_create_group():
     if request.method == "GET":
         if not account.require_admin():
-            return error("Vaaditaan ylläpitäjä")
+            flash("Vaaditaan ylläpitäjä")
+            return redirect("/")
         else:
             return render_template("admin_create_group.html")
     if request.method == "POST":
@@ -102,7 +106,8 @@ def admin_create_group():
         v.check(v.not_empty("nimi", name))
         v.has_length_less_than("nimi", name, 50)
         if v.has_errors():
-            return error(str(v))
+            flash(str(v))
+            return redirect("/create_group")
 
         sql = """INSERT INTO groups (name) VALUES (:name)"""
         result = db.session.execute(

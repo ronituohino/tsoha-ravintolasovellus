@@ -1,10 +1,9 @@
 import icon
 from app import app
 from db import db
-from flask import render_template, request, redirect, abort
+from flask import session, render_template, request, redirect, abort, flash
 import account
-from restaurant import get_groups
-from error import error
+from restaurant import get_restaurant_by_id, get_restaurant_ratings_by_id, get_groups
 from datetime import datetime
 import validation
 
@@ -34,19 +33,10 @@ def index():
     return render_template("index.html", restaurants=restaurants, groups=groups)
 
 
-@app.route("/restaurant/<int:id>")
+@app.route("/restaurant/<int:id>", methods=["GET"])
 def restaurant(id):
-    sql = """SELECT id, name, description, address
-             FROM restaurants WHERE id=:id"""
-    result = db.session.execute(sql, {"id": id})
-    restaurant = result.fetchone()
-
-    sql = """SELECT R.id, A.username, comment, rating, R.made_at, R.account_id
-             FROM ratings R, accounts A
-             WHERE restaurant_id=:id AND R.account_id=A.id"""
-    result = db.session.execute(sql, {"id": id})
-    ratings = result.fetchall()
-
+    restaurant = get_restaurant_by_id(id)
+    ratings = get_restaurant_ratings_by_id(id)
     groups = get_groups([restaurant])
 
     return render_template(
@@ -69,12 +59,14 @@ def login():
         v.check(v.not_empty("Salasana", password))
         v.check(v.has_length_more_than("Salasana", password, 5))
         if v.has_errors():
-            return error(str(v))
+            flash(str(v))
+            return redirect("/login")
 
         if account.login(username, password):
             return redirect("/")
         else:
-            return error("Väärä tunnus tai salasana")
+            flash("Väärä tunnus tai salasana")
+            return redirect("/login")
 
 
 @app.route("/logout")
@@ -110,14 +102,17 @@ def register():
         v.check(v.has_length_more_than("salasana", password1, 5))
         v.check(v.not_empty("salasana (uudestaan)", password2))
         if v.has_errors():
-            return error(str(v))
+            flash(str(v))
+            return redirect("/register")
 
         if password1 != password2:
-            return error("Salasanat eroavat")
+            flash("Salasanat eroavat")
+            return redirect("/register")
         if account.register(username, password1):
             return redirect("/")
         else:
-            return error("Rekisteröinti epäonnistui, koska käyttäjänimi on jo käytössä")
+            flash("Rekisteröinti epäonnistui, koska käyttäjänimi on jo käytössä")
+            return redirect("/register")
 
 
 @app.route("/give_rating", methods=["POST"])
@@ -139,7 +134,8 @@ def give_rating():
     v.check(v.not_empty("ravintola ID", restaurant_id))
     v.check(v.not_empty("käyttäjä ID", account_id))
     if v.has_errors():
-        return error(str(v))
+        flash(str(v))
+        return redirect(f"/restaurant/{restaurant_id}")
 
     made_at = datetime.now()
 
@@ -170,7 +166,8 @@ def delete_rating():
     v = validation.Validator()
     v.check(v.not_empty("arvostelu ID", rating_id))
     if v.has_errors():
-        return error(str(v))
+        flash(str(v))
+        return redirect(f"/restaurant/{restaurant_id}")
 
     # Ratings can be deleted by admins, or by the user that made the rating
     if not account.require_admin():
@@ -179,14 +176,16 @@ def delete_rating():
 
         account_id = result.fetchone()
         if account_id[0] != account.account_session()["id"]:
-            return error("Vaaditaan ylläpitäjä")
+            flash("Vaaditaan ylläpitäjä")
+            return redirect(f"/restaurant/{restaurant_id}")
 
     restaurant_id = request.form["restaurant_id"]
 
     # Validation
     v.check(v.not_empty("ravintola ID", restaurant_id))
     if v.has_errors():
-        return error(str(v))
+        flash(str(v))
+        return redirect(f"/restaurant/{restaurant_id}")
 
     sql = """DELETE FROM ratings WHERE id=:rating_id"""
     db.session.execute(sql, {"rating_id": rating_id})
