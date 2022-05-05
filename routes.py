@@ -137,6 +137,14 @@ def give_rating():
         flash(str(v))
         return redirect(f"/restaurant/{restaurant_id}")
 
+    # Error if this restaurant already has a rating from this user
+    sql = """SELECT id FROM ratings WHERE account_id=:account_id"""
+    result = db.session.execute(sql, {"account_id": account_id})
+    existing_ratings = result.fetchall()
+    if len(existing_ratings) > 0:
+        flash("Arvostelun luonti epäonnistui, koska olet jo jättänyt arvostelun!")
+        return redirect(f"/restaurant/{restaurant_id}")
+
     made_at = datetime.now()
 
     sql = """INSERT INTO ratings (comment, rating, restaurant_id, account_id, made_at) 

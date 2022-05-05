@@ -2,9 +2,12 @@ class Validator:
     def __init__(self):
         self.errors = []
 
+    def add_error(self, error):
+        self.errors.append(error)
+
     def check(self, string):
         if string != None and len(string) > 0:
-            self.errors.append(string)
+            self.add_error(string)
 
     def has_errors(self):
         return len(self.errors) > 0
