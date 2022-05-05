@@ -4,10 +4,33 @@
   margin-top: 10px;
 }
 
+#restaurant-box-wrapper {
+  padding: 16px;
+  background-color: white;
+  border-radius: 16px;
+}
+
+#restaurant-box {
+  margin: auto;
+  height: 200px;
+  overflow-y: scroll;
+}
+
 .navbar {
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
+  -webkit-border-radius: 16px;
+  -moz-border-radius: 16px;
+  border-radius: 16px;
+}
+
+#navbar-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+#navbar-empty-space {
+  flex-basis: 100%;
 }
 
 #map { 

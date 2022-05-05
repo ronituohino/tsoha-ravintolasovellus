@@ -20,56 +20,73 @@
   </head>
   
   <body id="layout-body">
-    <div class="mt-2">
-      <nav class="navbar sticky-top navbar-expand-sm navbar-light bg-light rounded w-75 m-auto">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="/">Ravintolasovellus</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav">
-              {% if session.account and session.account.admin %}
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Ylläpitäjä
-                  </a>
-                  <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <li><a class="dropdown-item" href="/create_restaurant">Luo ravintola</a></li>
-                    <li><a class="dropdown-item" href="/crate_group">Luo ryhmä</a></li>
-                  </ul>
-                </li>
-              {% endif %}
-              
+    <nav class="navbar navbar-expand-lg navbar-light bg-light m-auto">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">Ravintolasovellus</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul id="navbar-body" class="navbar-nav">
+            <div id="navbar-empty-space"></div>
+            <form id="search-form" action="/search" method="POST">
+              <input class="form-control me-2" type="search" name="search" placeholder="Hae...">
+            </form>
+
+            <li class="nav-item dropdown">
+              <button class="btn btn-outline-info" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown">
+                Tagit
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                {% for group in groups %}
+                  <p><input form="search-form" type="checkbox" name="groups" value="{{group.name}}"> {{group.name}}</p>
+                {% endfor %}
+              </ul>
+            </li>
+
+            <button class="btn btn-outline-success" form="search-form" type="submit">Hae</button>
+
+            {% if session.account and session.account.admin %}
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Käyttäjä
+                <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Ylläpitäjä
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  {% if session.account %}
-                    <p>Kirjautunut: {{session.account.username}}</p>
-                    <li><a class="dropdown-item" href="/logout">Kirjaudu ulos</a></li>
-                  {% else %}
-                    <li><a class="dropdown-item" href="/login">Kirjaudu sisään</a></li>
-                    <li><a class="dropdown-item" href="/register">Rekisteröidy</a></li>
-                  {% endif %}
+                  <li><a class="dropdown-item" href="/create_restaurant">Luo ravintola</a></li>
+                  <li><a class="dropdown-item" href="/crate_group">Luo ryhmä</a></li>
                 </ul>
               </li>
-            </ul>
-          </div>
+            {% endif %}
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Käyttäjä
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                {% if session.account %}
+                  <li><h6 class="dropdown-header">{{session.account.username}}</h6></li>
+                  <li><a class="dropdown-item" href="/logout">Kirjaudu ulos</a></li>
+                {% else %}
+                  <li><a class="dropdown-item" href="/login">Kirjaudu sisään</a></li>
+                  <li><a class="dropdown-item" href="/register">Rekisteröidy</a></li>
+                {% endif %}
+              </ul>
+            </li>
+          </ul>
         </div>
-      </nav>
-      <hr>
-      {% with messages = get_flashed_messages() %}  
-          {% if messages %}  
-                {% for message in messages %}  
-                    <p>{{ message }}</p>  
-                {% endfor %}  
-          {% endif %}  
-      {% endwith %}  
-  
-      <hr>
-      {% block content %}{% endblock %}
-    </div>
+      </div>
+    </nav>
+    <hr>
+    {% with messages = get_flashed_messages() %}  
+        {% if messages %}  
+              {% for message in messages %}  
+                  <p>{{ message }}</p>  
+              {% endfor %}  
+        {% endif %}  
+    {% endwith %}  
+
+    <hr>
+    {% block content %}{% endblock %}
   </body>
 </html>

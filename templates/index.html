@@ -1,17 +1,6 @@
 {% extends "layout.html" %}
 {% block title %}Etusivu{% endblock %}
 {% block content %}
-  <div>
-    <form action="/search" method="POST">
-      <input type="search" name="search">
-      <input type="submit" value="Hae">
-
-      {% for group in groups %}
-        <p><input type="checkbox" name="groups" value="{{group.name}}"> {{group.name}}</p>
-      {% endfor %}
-    </form>
-  </div>
-
   <div id="map"></div>
 
   <script>
@@ -28,20 +17,24 @@
     }).addTo(map);
   </script>
 
-  {% for restaurant in restaurants %}
-    <a href="/restaurant/{{restaurant.id}}">
-    <div>
-      <p>Nimi: {{restaurant.name}}</p>
-      <p>Kuvaus: {{restaurant.description}}</p>
-      <p>Osoite: {{restaurant.address}}</p>
-      <ul>
-        {% for group in restaurant_groups %}
-          {% if group.restaurant_id == restaurant.id %}
-            <li>{{group.name}}</li>
-          {% endif %}
-        {% endfor %}
-      </ul>
+  <div id="restaurant-box-wrapper">
+    <div id="restaurant-box">
+      {% for restaurant in restaurants %}
+        <a href="/restaurant/{{restaurant.id}}">
+        <div>
+          <p>Nimi: {{restaurant.name}}</p>
+          <p>Kuvaus: {{restaurant.description}}</p>
+          <p>Osoite: {{restaurant.address}}</p>
+          <ul>
+            {% for group in restaurant_groups %}
+              {% if group.restaurant_id == restaurant.id %}
+                <li>{{group.name}}</li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+        <hr>
+      {% endfor %}
     </div>
-    <hr>
-  {% endfor %}
+  </div>
 {% endblock %}
