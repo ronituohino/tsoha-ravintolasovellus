@@ -3,8 +3,21 @@ from app import app
 from db import db
 from flask import session, render_template, request, redirect, abort, flash
 import account
-from restaurant import get_restaurant_by_id, get_restaurant_ratings_by_id, get_groups
+from restaurant import (
+    get_restaurant_by_id,
+    get_restaurant_ratings_by_id,
+    get_groups,
+    translate_groups_to_id,
+)
 from datetime import datetime
+from search import (
+    get_has_filters,
+    get_search_filter,
+    get_group_filter,
+    search_has_params,
+    search_word_param,
+    search_group_param,
+)
 import validation
 
 # Defines the main routes for the application
@@ -12,25 +25,68 @@ import validation
 
 @app.route("/")
 def index():
-    has_search = len(request.args) > 0
+    has_search = "search" in request.args
+    has_groups = "groups" in request.args
+
+    search_word = ""
+    group_id_list = []
+    group_count = 0
     if has_search:
         search_word = "".join(
             [f"%{word}%" for word in request.args["search"].split(" ")]
         )
-        sql = """SELECT id, name, description, address
-                 FROM restaurants WHERE name ILIKE :search OR description ILIKE :search 
-                 ORDER BY id DESC"""
-        result = db.session.execute(sql, {"search": search_word})
-    else:
-        sql = """SELECT id, name, description, address
-                 FROM restaurants ORDER BY id DESC"""
-        result = db.session.execute(sql)
+    if has_groups:
+        group_name_list = request.args["groups"].split("-")
+        group_id_list = translate_groups_to_id(group_name_list)
+        group_count = len(group_id_list)
 
+    # Concatenating filters don't use input values, no SQL Injenction here
+    filters = [get_search_filter(has_search), get_group_filter(has_groups)]
+    parsed_filters = [f for f in filters if f != None]
+    string = "AND".join(parsed_filters)
+
+    sql = f"""SELECT id, name, description, address FROM restaurants
+              {get_has_filters(parsed_filters)} {string}"""
+    result = db.session.execute(
+        sql,
+        {
+            "search": search_word,
+            "group_id_list": group_id_list,
+            "group_count": group_count,
+        },
+    )
     restaurants = result.fetchall()
 
-    groups = get_groups(restaurants)
+    restaurant_groups = get_groups(restaurants)
 
-    return render_template("index.html", restaurants=restaurants, groups=groups)
+    # Get search bar groups
+    sql = """SELECT id, name FROM groups"""
+    result = db.session.execute(sql)
+    groups = result.fetchall()
+
+    return render_template(
+        "index.html",
+        restaurants=restaurants,
+        restaurant_groups=restaurant_groups,
+        groups=groups,
+    )
+
+
+@app.route("/search", methods=["POST"])
+def search():
+    search_word = request.form["search"]
+    has_search_word = len(search_word) > 0
+    search_groups = request.form.getlist("groups")
+    has_search_groups = len(search_groups) > 0
+
+    params = [
+        search_word_param(has_search_word, search_word),
+        search_group_param(has_search_groups, search_groups),
+    ]
+    parsed_params = [p for p in params if p != None]
+    string = "&".join(parsed_params)
+
+    return redirect(f"/{search_has_params(params)}{string}")
 
 
 @app.route("/restaurant/<int:id>", methods=["GET"])
@@ -73,15 +129,6 @@ def login():
 def logout():
     account.logout()
     return redirect("/")
-
-
-@app.route("/search", methods=["POST"])
-def search():
-    search_word = request.form["search"]
-    if len(search_word) > 0:
-        return redirect(f"/?search={search_word}")
-    else:
-        return redirect("/")
 
 
 @app.route("/register", methods=["GET", "POST"])

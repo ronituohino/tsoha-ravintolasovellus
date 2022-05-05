@@ -1,6 +1,17 @@
 {% extends "layout.html" %}
 {% block title %}Etusivu{% endblock %}
 {% block content %}
+  <div>
+    <form action="/search" method="POST">
+      <input type="search" name="search">
+      <input type="submit" value="Hae">
+
+      {% for group in groups %}
+        <p><input type="checkbox" name="groups" value="{{group.name}}"> {{group.name}}</p>
+      {% endfor %}
+    </form>
+  </div>
+
   {% for restaurant in restaurants %}
     <a href="/restaurant/{{restaurant.id}}">
     <div>
@@ -8,7 +19,7 @@
       <p>Kuvaus: {{restaurant.description}}</p>
       <p>Osoite: {{restaurant.address}}</p>
       <ul>
-        {% for group in groups %}
+        {% for group in restaurant_groups %}
           {% if group.restaurant_id == restaurant.id %}
             <li>{{group.name}}</li>
           {% endif %}

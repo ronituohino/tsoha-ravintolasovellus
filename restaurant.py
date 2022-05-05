@@ -25,3 +25,10 @@ def get_groups(restaurants):
     result = db.session.execute(sql, {"id_list": id_list})
     groups = result.fetchall()
     return groups
+
+
+def translate_groups_to_id(group_name_list):
+    # Turns list of group names to list of their id's
+    sql = """SELECT id FROM groups WHERE name=ANY(:group_name_list)"""
+    result = db.session.execute(sql, {"group_name_list": group_name_list})
+    return [g[0] for g in result.fetchall()]
