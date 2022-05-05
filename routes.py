@@ -185,8 +185,10 @@ def give_rating():
         return redirect(f"/restaurant/{restaurant_id}")
 
     # Error if this restaurant already has a rating from this user
-    sql = """SELECT id FROM ratings WHERE account_id=:account_id"""
-    result = db.session.execute(sql, {"account_id": account_id})
+    sql = """SELECT id FROM ratings WHERE account_id=:account_id AND restaurant_id=:restaurant_id"""
+    result = db.session.execute(
+        sql, {"account_id": account_id, "restaurant_id": restaurant_id}
+    )
     existing_ratings = result.fetchall()
     if len(existing_ratings) > 0:
         flash("Arvostelun luonti epäonnistui, koska olet jo jättänyt arvostelun!")
