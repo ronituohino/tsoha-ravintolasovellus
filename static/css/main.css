@@ -22,15 +22,22 @@
   border-radius: 16px;
 }
 
-#navbar-body {
+
+#navbar-main {
+  padding: 4px;
+  padding-left: 12px;
+  padding-right: 12px;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
 }
 
-#navbar-empty-space {
-  flex-basis: 100%;
+#navbar-body {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
 }
 
 #map { 
