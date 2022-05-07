@@ -1,9 +1,15 @@
 {% extends "layout.html" %}
 {% block title %}Luo ravintola{% endblock %}
 {% block content %}
-  <form id="create_group" action="/create_group" method="post">
-    <p>Nimi: <input type="text" name="name" max="50"></p>
-    <input type="hidden" name="csrf_token" value="{{session.account.csrf_token}}">
-    <input type="submit" value="Luo">
-  </form>
+  <div id="box-wrapper">
+    <form id="create_group" action="/create_group" method="post" class="row g-3">
+      <div class="col-12">
+        <label for="name-input" class="form-label">Ryhmän nimi</label>
+        <input type="text" name="name" max="50" class="form-control" id="name-input">
+      </div>
+      <input type="hidden" name="csrf_token" value="{{session.account.csrf_token}}">
+
+      <input type="submit" value="Luo ryhmä">
+    </form>
+  </div>
 {% endblock %}

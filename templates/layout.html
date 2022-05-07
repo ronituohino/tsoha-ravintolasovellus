@@ -19,69 +19,86 @@
 
   </head>
   
+  <div id="map"></div>
+
+  <script>
+    var map = L.map('map').setView([60.175, 25.01], 13);
+  
+    var tiles = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+      minZoom: 8,
+      maxZoom: 18,
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+        'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+      id: 'mapbox/streets-v11',
+      tileSize: 512,
+      zoomOffset: -1
+    }).addTo(map);
+  </script>
+
   <body id="layout-body">
-    <div class="container-md">
-      <nav class="navbar navbar-expand-md navbar-light bg-light">
-        <div id="navbar-main" class="container-fluid">
-          <a class="navbar-brand" href="/">Ravintolasovellus</a>
-  
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-  
-          <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul id="navbar-body" class="navbar-nav ms-auto">
-              <form id="search-form" action="/search" method="POST">
-                <input class="form-control me-2" type="search" name="search" placeholder="Hae...">
-              </form>
-  
-              <li class="nav-item dropdown">
-                <button class="btn btn-outline-info" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown">
-                  Tagit
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+    <nav class="navbar navbar-expand-xl navbar-light bg-light">
+      <div id="navbar-main" class="container-fluid">
+        <a class="navbar-brand" href="/">Ravintolasovellus</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul id="navbar-body" class="navbar-nav ms-auto">
+            <form id="search-form" action="/search" method="POST">
+              <input class="form-control me-2" type="search" name="search" placeholder="Hae...">
+            </form>
+
+            <li class="nav-item dropdown">
+              <button class="btn btn-outline-info" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown">
+                Tagit
+              </button>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" id="group-menu">
+                <ul class="list-group">
                   {% for group in groups %}
-                    <p><input form="search-form" type="checkbox" name="groups" value="{{group.name}}"> {{group.name}}</p>
+                    <label class="list-group-item">
+                      <input class="form-check-input me-1" form="search-form" type="checkbox" name="groups" value="{{group.name}}">
+                      {{group.name}}
+                    </label>
                   {% endfor %}
                 </ul>
-              </li>
-  
-              <button class="btn btn-outline-success" form="search-form" type="submit">Hae</button>
-  
-              {% if session.account and session.account.admin %}
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Ylläpitäjä
-                  </a>
-                  <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <li><a class="dropdown-item" href="/create_restaurant">Luo ravintola</a></li>
-                    <li><a class="dropdown-item" href="/crate_group">Luo ryhmä</a></li>
-                  </ul>
-                </li>
-              {% endif %}
-              
+              </div>
+            </li>
+
+            <button class="btn btn-outline-success" form="search-form" type="submit">Hae</button>
+
+            {% if session.account and session.account.admin %}
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Käyttäjä
+                  Ylläpitäjä
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  {% if session.account %}
-                    <li><h6 class="dropdown-header">{{session.account.username}}</h6></li>
-                    <li><a class="dropdown-item" href="/logout">Kirjaudu ulos</a></li>
-                  {% else %}
-                    <li><a class="dropdown-item" href="/login">Kirjaudu sisään</a></li>
-                    <li><a class="dropdown-item" href="/register">Rekisteröidy</a></li>
-                  {% endif %}
+                  <li><a class="dropdown-item" href="/create_restaurant">Luo ravintola</a></li>
+                  <li><a class="dropdown-item" href="/create_group">Luo ryhmä</a></li>
                 </ul>
               </li>
-            </ul>
-          </div>
-        
+            {% endif %}
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Käyttäjä
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                {% if session.account %}
+                  <li><h6 class="dropdown-header">{{session.account.username}}</h6></li>
+                  <li><a class="dropdown-item" href="/logout">Kirjaudu ulos</a></li>
+                {% else %}
+                  <li><a class="dropdown-item" href="/login">Kirjaudu sisään</a></li>
+                  <li><a class="dropdown-item" href="/register">Rekisteröidy</a></li>
+                {% endif %}
+              </ul>
+            </li>
+          </ul>
         </div>
-      </nav>
-    </div>
-    
-    <hr>
+      </div>
+    </nav>
+  
     {% with messages = get_flashed_messages() %}  
         {% if messages %}  
               {% for message in messages %}  
@@ -91,6 +108,7 @@
     {% endwith %}  
 
     <hr>
+
     {% block content %}{% endblock %}
   </body>
 </html>

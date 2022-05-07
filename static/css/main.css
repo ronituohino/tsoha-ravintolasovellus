@@ -1,10 +1,10 @@
 #layout-body {
-  margin-left: 44px;
+  margin-left: 50%;
   margin-right: 44px;
-  margin-top: 10px;
+  margin-top: 22px;
 }
 
-#restaurant-box-wrapper {
+#box-wrapper {
   padding: 16px;
   background-color: white;
   border-radius: 16px;
@@ -12,7 +12,7 @@
 
 #restaurant-box {
   margin: auto;
-  height: 200px;
+  max-height: 80vh;
   overflow-y: scroll;
 }
 
@@ -38,6 +38,11 @@
   flex-direction: row;
   align-items: center;
   gap: 10px;
+}
+
+#group-menu {
+  height: 200px;
+  overflow-y: scroll;
 }
 
 #map { 
