@@ -41,3 +41,10 @@ CREATE TABLE ratings (
   account_id INTEGER REFERENCES accounts (id) ON DELETE CASCADE,
   made_at TIMESTAMP 
 );
+
+DROP TABLE IF EXISTS average_ratings CASCADE;
+CREATE TABLE average_ratings (
+  id SERIAL PRIMARY KEY,
+  restaurant_id INTEGER REFERENCES restaurants,
+  average_rating FLOAT
+);

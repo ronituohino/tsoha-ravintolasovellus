@@ -1,12 +1,6 @@
 # Get request SQL Filters
 
 
-def get_has_filters(filters):
-    if len(filters) > 0:
-        return "WHERE"
-    return ""
-
-
 def get_search_filter(has_search):
     if has_search:
         return "(name ILIKE :search OR description ILIKE :search)"

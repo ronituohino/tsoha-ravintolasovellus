@@ -1,19 +1,19 @@
+from turtle import update
 import icon
 from app import app
 from db import db
 from flask import session, render_template, request, redirect, abort, flash
 import account
 from restaurant import (
-    get_location,
     get_restaurant_by_id,
-    get_restaurant_ratings_by_id,
     get_groups,
     get_location,
+    get_restaurant_ratings_by_id,
     translate_groups_to_id,
+    update_average_rating,
 )
 from datetime import datetime
 from search import (
-    get_has_filters,
     get_search_filter,
     get_group_filter,
     search_has_params,
@@ -51,12 +51,18 @@ def index():
         group_count = len(group_id_list)
 
     # Concatenating filters don't use input values, no SQL Injenction here
-    filters = [get_search_filter(has_search), get_group_filter(has_groups)]
+    filters = [
+        get_search_filter(has_search),
+        get_group_filter(has_groups),
+    ]
     parsed_filters = [f for f in filters if f != None]
     string = "AND".join(parsed_filters)
 
-    sql = f"""SELECT id, name, description, address, phone FROM restaurants
-              {get_has_filters(parsed_filters)} {string}"""
+    # Connect filters and query the database
+    sql = f"""SELECT R.id, R.name, R.description, R.address, R.phone, A.average_rating 
+              FROM restaurants R, average_ratings A
+              WHERE A.restaurant_id=R.id {string} 
+              ORDER BY A.average_rating DESC"""
     result = db.session.execute(
         sql,
         {
@@ -65,14 +71,25 @@ def index():
             "group_count": group_count,
         },
     )
-    restaurants = result.fetchall()
+    restaurants = [
+        {
+            "id": r[0],
+            "name": r[1],
+            "description": r[2],
+            "address": r[3],
+            "phone": r[4],
+            "average_rating": r[5],
+        }
+        for r in result.fetchall()
+    ]
     restaurant_amount = len(restaurants)
+    id_list = [r["id"] for r in restaurants]
 
     # Find groups for each filtered restaurant
-    restaurant_groups = get_groups(restaurants)
+    restaurant_groups = get_groups(id_list)
 
     # Get restaurant location data in JSON format
-    location_data = get_location(restaurants)
+    location_data = get_location(id_list)
 
     return render_template(
         "index.html",
@@ -97,17 +114,17 @@ def search():
     parsed_params = [p for p in params if p != None]
     string = "&".join(parsed_params)
 
-    return redirect(f"/{search_has_params(params)}{string}")
+    return redirect(f"/{search_has_params(parsed_params)}{string}")
 
 
 @app.route("/restaurant/<int:id>", methods=["GET"])
 def restaurant(id):
     restaurant = get_restaurant_by_id(id)
     ratings = get_restaurant_ratings_by_id(id)
-    restaurant_groups = get_groups([restaurant])
+    restaurant_groups = get_groups([id])
 
     # Get restaurant location data in JSON format
-    location_data = get_location([restaurant])
+    location_data = get_location([id])
 
     return render_template(
         "restaurant.html",
@@ -227,6 +244,10 @@ def give_rating():
         },
     )
     db.session.commit()
+
+    # Update restaurant average rating
+    update_average_rating(restaurant_id)
+
     return redirect(f"/restaurant/{restaurant_id}")
 
 
@@ -236,6 +257,7 @@ def delete_rating():
         abort(403)
 
     rating_id = request.form["rating_id"]
+    restaurant_id = request.form["restaurant_id"]
 
     # Validation
     v = validation.Validator()
@@ -254,8 +276,6 @@ def delete_rating():
             flash("Vaaditaan ylläpitäjä")
             return redirect(f"/restaurant/{restaurant_id}")
 
-    restaurant_id = request.form["restaurant_id"]
-
     # Validation
     v.check(v.not_empty("ravintola ID", restaurant_id))
     if v.has_errors():
@@ -265,6 +285,8 @@ def delete_rating():
     sql = """DELETE FROM ratings WHERE id=:rating_id"""
     db.session.execute(sql, {"rating_id": rating_id})
     db.session.commit()
+
+    update_average_rating(restaurant_id)
 
     return redirect(f"/restaurant/{restaurant_id}")
 

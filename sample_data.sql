@@ -30,3 +30,10 @@ VALUES
   (3, 'alex', 'pbkdf2:sha256:260000$yfRtUjpV1tK39JWc$a52eaf9edbfe2a59d9e5619136121a39ab074a541f134472f354d5a1ef1aa34f', FALSE, '2022-05-13 12:56:02');
 
 SELECT setval(pg_get_serial_sequence('accounts', 'id'), (SELECT MAX(id) from accounts));
+
+INSERT INTO average_ratings (id, restaurant_id, average_rating)
+VALUES
+  (1, 1, 0),
+  (2, 2, 0),
+  (3, 3, 0);
+SELECT setval(pg_get_serial_sequence('average_ratings', 'id'), (SELECT MAX(id) from average_ratings));
