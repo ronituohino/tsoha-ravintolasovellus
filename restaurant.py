@@ -1,8 +1,9 @@
 from db import db  # type: ignore
+from const import months
 
 
 def get_restaurant_by_id(id):
-    sql = """SELECT id, name, description, address
+    sql = """SELECT id, name, description, address, phone
              FROM restaurants WHERE id=:id"""
     result = db.session.execute(sql, {"id": id})
     restaurant = result.fetchone()
@@ -10,12 +11,25 @@ def get_restaurant_by_id(id):
 
 
 def get_restaurant_ratings_by_id(id):
-    sql = """SELECT R.id, A.username, comment, rating, R.made_at, R.account_id
+    sql = """SELECT A.username, comment, rating, R.account_id, R.made_at
              FROM ratings R, accounts A
              WHERE restaurant_id=:id AND R.account_id=A.id"""
     result = db.session.execute(sql, {"id": id})
-    ratings = result.fetchall()
+    ratings = [
+        {
+            "username": c[0],
+            "comment": c[1],
+            "rating": c[2],
+            "account_id": c[3],
+            "made_at": format_time(c[4]),
+        }
+        for c in result.fetchall()
+    ]
     return ratings
+
+
+def format_time(time):
+    return f"{time.day}. {months[time.month - 1]} - {time.year}"
 
 
 def get_groups(restaurants):

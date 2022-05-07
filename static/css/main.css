@@ -10,6 +10,11 @@
   border-radius: 16px;
 }
 
+#no-restaurants-found {
+  align-self: center; 
+  margin-top: 10px;
+}
+
 #restaurant-box {
   margin: auto;
   max-height: 80vh;
@@ -26,6 +31,13 @@
   flex-direction: row;
   gap: 5px;
   margin-bottom: 5px;
+}
+
+#rating-header {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
 }
 
 .navbar {

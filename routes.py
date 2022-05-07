@@ -66,6 +66,7 @@ def index():
         },
     )
     restaurants = result.fetchall()
+    restaurant_amount = len(restaurants)
 
     # Find groups for each filtered restaurant
     restaurant_groups = get_groups(restaurants)
@@ -76,6 +77,7 @@ def index():
     return render_template(
         "index.html",
         restaurants=restaurants,
+        restaurant_amount=restaurant_amount,
         restaurant_groups=restaurant_groups,
         location_data=location_data,
     )
@@ -102,7 +104,7 @@ def search():
 def restaurant(id):
     restaurant = get_restaurant_by_id(id)
     ratings = get_restaurant_ratings_by_id(id)
-    groups = get_groups([restaurant])
+    restaurant_groups = get_groups([restaurant])
 
     # Get restaurant location data in JSON format
     location_data = get_location([restaurant])
@@ -111,7 +113,7 @@ def restaurant(id):
         "restaurant.html",
         restaurant=restaurant,
         ratings=ratings,
-        groups=groups,
+        restaurant_groups=restaurant_groups,
         location_data=location_data,
     )
 

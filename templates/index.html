@@ -19,6 +19,9 @@
           </div>
         </a>
       {% endfor %}
+      {% if restaurant_amount == 0 %}
+        <p id="no-restaurants-found">Ravintoloita ei löytynyt!</p>
+      {% endif %}
     </div>
   </div>
 {% endblock %}
