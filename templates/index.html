@@ -1,15 +1,6 @@
 {% extends "layout.html" %}
 {% block title %}Etusivu{% endblock %}
 {% block content %}
-  <script>
-    const restaurantLocations = JSON.parse('{{ location_data | tojson }}');
-
-    restaurantLocations.forEach(location => {
-      const marker = L.marker([location.lat, location.lon]).addTo(map);
-      marker.bindPopup(location.name);
-    });
-  </script>
-
   <div id="box-wrapper">
     <div id="restaurant-box" class="list-group">
       {% for restaurant in restaurants %}

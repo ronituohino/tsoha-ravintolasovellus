@@ -35,6 +35,17 @@
     }).addTo(map);
   </script>
 
+  {% if location_data %}
+    <script>
+      const restaurantLocations = JSON.parse('{{ location_data | tojson }}');
+
+      restaurantLocations.forEach(location => {
+        const marker = L.marker([location.lat, location.lon]).addTo(map);
+        marker.bindPopup(`<a href=/restaurant/${location.id}>${location.name}</a>`);
+      });
+    </script>
+  {% endif %}
+
   <body id="layout-body">
     <nav class="navbar navbar-expand-xl navbar-light bg-light">
       <div id="navbar-main" class="container-fluid">

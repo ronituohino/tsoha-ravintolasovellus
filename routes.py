@@ -30,7 +30,6 @@ def before_request():
     result = db.session.execute(sql)
     groups = result.fetchall()
     serializable_groups = [{"id": g[0], "name": g[1]} for g in groups]
-    print(serializable_groups)
     session["groups"] = serializable_groups
 
 
@@ -105,8 +104,15 @@ def restaurant(id):
     ratings = get_restaurant_ratings_by_id(id)
     groups = get_groups([restaurant])
 
+    # Get restaurant location data in JSON format
+    location_data = get_location([restaurant])
+
     return render_template(
-        "restaurant.html", restaurant=restaurant, ratings=ratings, groups=groups
+        "restaurant.html",
+        restaurant=restaurant,
+        ratings=ratings,
+        groups=groups,
+        location_data=location_data,
     )
 
 
