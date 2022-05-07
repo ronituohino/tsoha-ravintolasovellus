@@ -5,7 +5,9 @@ CREATE TABLE restaurants (
   description TEXT, 
   address TEXT,
   phone TEXT,
-  made_at TIMESTAMP
+  made_at TIMESTAMP,
+  coords_lat FLOAT,
+  coords_lon FLOAT
 );
 
 DROP TABLE IF EXISTS groups CASCADE;

@@ -4,9 +4,11 @@ from db import db
 from flask import session, render_template, request, redirect, abort, flash
 import account
 from restaurant import (
+    get_location,
     get_restaurant_by_id,
     get_restaurant_ratings_by_id,
     get_groups,
+    get_location,
     translate_groups_to_id,
 )
 from datetime import datetime
@@ -21,6 +23,15 @@ from search import (
 import validation
 
 # Defines the main routes for the application
+@app.before_request
+def before_request():
+    # Get search bar groups
+    sql = """SELECT id, name FROM groups"""
+    result = db.session.execute(sql)
+    groups = result.fetchall()
+    serializable_groups = [{"id": g[0], "name": g[1]} for g in groups]
+    print(serializable_groups)
+    session["groups"] = serializable_groups
 
 
 @app.route("/")
@@ -57,18 +68,17 @@ def index():
     )
     restaurants = result.fetchall()
 
+    # Find groups for each filtered restaurant
     restaurant_groups = get_groups(restaurants)
 
-    # Get search bar groups
-    sql = """SELECT id, name FROM groups"""
-    result = db.session.execute(sql)
-    groups = result.fetchall()
+    # Get restaurant location data in JSON format
+    location_data = get_location(restaurants)
 
     return render_template(
         "index.html",
         restaurants=restaurants,
         restaurant_groups=restaurant_groups,
-        groups=groups,
+        location_data=location_data,
     )
 
 

@@ -1,8 +1,8 @@
-INSERT INTO restaurants (id, name, description, address, phone, made_at) 
+INSERT INTO restaurants (id, name, description, address, phone, made_at, coords_lat, coords_lon) 
 VALUES 
-  (1, 'Levant', 'Levant restaurants offers middle Eastern food ( Syrian/ Lebanese )', 'Bulevardi 15, Helsinki 00120', 1234567899, '2021-04-16 04:05:06'), 
-  (2, 'Ravintola Nerone', 'Italian, Pizza, Mediterranean', 'Pursimiehenkatu 27, Helsinki 00150', 1111111111, '2021-12-22 15:55:36'),
-  (3, 'Shelter', 'European, Scandinavian', 'Kanavaranta 7, Helsinki 00160', 9999999999, '2022-01-01 13:07:12');
+  (1, 'Levant', 'Levant restaurants offers middle Eastern food ( Syrian/ Lebanese )', 'Bulevardi 15, Helsinki 00120', 1234567899, '2021-04-16 04:05:06', 60.17, 24.93), 
+  (2, 'Ravintola Nerone', 'Italian, Pizza, Mediterranean', 'Pursimiehenkatu 27, Helsinki 00150', 1111111111, '2021-12-22 15:55:36', 60.17, 24.95),
+  (3, 'Shelter', 'European, Scandinavian', 'Kanavaranta 7, Helsinki 00160', 9999999999, '2022-01-01 13:07:12', 60.18, 24.93);
 
 SELECT setval(pg_get_serial_sequence('restaurants', 'id'), (SELECT MAX(id) from restaurants));
 
