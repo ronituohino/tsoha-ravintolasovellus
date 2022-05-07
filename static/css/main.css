@@ -16,6 +16,18 @@
   overflow-y: scroll;
 }
 
+#restaurant-contact {
+  margin-top: -15px;
+  margin-bottom: -5px;
+}
+
+#restaurant-groups {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+
 .navbar {
   -webkit-border-radius: 16px;
   -moz-border-radius: 16px;
@@ -41,7 +53,7 @@
 }
 
 #group-menu {
-  height: 200px;
+  max-height: 200px;
   overflow-y: scroll;
 }
 

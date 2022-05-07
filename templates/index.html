@@ -6,15 +6,17 @@
       {% for restaurant in restaurants %}
         <a href="/restaurant/{{restaurant.id}}" class="list-group-item list-group-item-action">
           <h3>{{restaurant.name}}</h3>
-          <p class="text-muted">{{restaurant.description}}</p>
-          <p>Osoite: {{restaurant.address}}</p>
-          <ul>
+          <p>{{restaurant.description}}</p>
+          <div id="restaurant-contact">
+            <p class="text-muted"><small>{{restaurant.address}} | {{restaurant.phone}}</small></p>
+          </div>
+          <div id="restaurant-groups">
             {% for group in restaurant_groups %}
               {% if group.restaurant_id == restaurant.id %}
-                <li>{{group.name}}</li>
+                <span class="badge rounded-pill bg-primary">{{group.name}}</span>
               {% endif %}
             {% endfor %}
-          </ul>
+          </div>
         </a>
       {% endfor %}
     </div>

@@ -55,7 +55,7 @@ def index():
     parsed_filters = [f for f in filters if f != None]
     string = "AND".join(parsed_filters)
 
-    sql = f"""SELECT id, name, description, address FROM restaurants
+    sql = f"""SELECT id, name, description, address, phone FROM restaurants
               {get_has_filters(parsed_filters)} {string}"""
     result = db.session.execute(
         sql,
