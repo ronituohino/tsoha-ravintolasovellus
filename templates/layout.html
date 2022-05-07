@@ -46,6 +46,16 @@
     </script>
   {% endif %}
 
+  <script>
+    const checkBox = (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+
+      const inputElement = e.target.querySelector('input')
+      inputElement.checked = !inputElement.checked
+    }
+  </script>
+
   <body id="layout-body">
     <nav class="navbar navbar-expand-xl navbar-light bg-light">
       <div id="navbar-main" class="container-fluid">
@@ -63,12 +73,12 @@
 
             <li class="nav-item dropdown">
               <button class="btn btn-outline-info" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown">
-                Tagit
+                Ryhmät
               </button>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" id="group-menu">
-                <ul class="list-group">
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <ul class="list-group" id="group-menu" style="margin-left: 12px;">
                   {% for group in session.groups %}
-                    <label class="list-group-item">
+                    <label onclick="checkBox(event, this)" class="list-group-item dropdown-item">
                       <input class="form-check-input me-1" form="search-form" type="checkbox" name="groups" value="{{group.name}}">
                       {{group.name}}
                     </label>
