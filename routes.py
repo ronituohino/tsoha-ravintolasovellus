@@ -85,7 +85,6 @@ def index():
         }
         for r in result.fetchall()
     ]
-    print(restaurants)
     restaurant_amount = len(restaurants)
     id_list = [r["id"] for r in restaurants]
 
@@ -175,7 +174,6 @@ def register():
     if request.method == "GET":
         return render_template("register.html")
     if request.method == "POST":
-
         username = request.form["username"]
         password1 = request.form["password1"]
         password2 = request.form["password2"]
