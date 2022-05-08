@@ -3,8 +3,8 @@ from const import months
 
 
 def get_restaurant_by_id(id):
-    sql = """SELECT R.id, R.name, R.description, R.address, R.phone, A.average_rating
-             FROM restaurants R, average_ratings A WHERE R.id=:id AND A.restaurant_id=:id"""
+    sql = """SELECT id, name, description, address, phone, average_rating
+             FROM restaurants WHERE id=:id"""
     result = db.session.execute(sql, {"id": id})
     restaurant = result.fetchone()
     return restaurant
@@ -41,7 +41,7 @@ def get_groups(id_list):
 
 
 def get_location(id_list):
-    sql = """SELECT coords_lat, coords_lon, id, name FROM restaurants WHERE id=ANY(:id_list)"""
+    sql = """SELECT latitude, longitude, id, name FROM restaurants WHERE id=ANY(:id_list)"""
     result = db.session.execute(sql, {"id_list": id_list})
     location_data = result.fetchall()
     serializable_coords = [
@@ -67,7 +67,7 @@ def update_average_rating(restaurant_id):
     else:
         average_rating = round(average_rating, 1)
 
-    sql = """UPDATE average_ratings SET average_rating=:average_rating WHERE restaurant_id=:restaurant_id"""
+    sql = """UPDATE restaurants SET average_rating=:average_rating WHERE id=:restaurant_id"""
     db.session.execute(
         sql, {"average_rating": average_rating, "restaurant_id": restaurant_id}
     )

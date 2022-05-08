@@ -1,8 +1,8 @@
-INSERT INTO restaurants (id, name, description, address, phone, made_at, coords_lat, coords_lon) 
+INSERT INTO restaurants (id, name, description, address, phone, made_at, latitude, longitude, average_rating) 
 VALUES 
-  (1, 'Levant', 'Levant restaurants offers middle Eastern food ( Syrian/ Lebanese )', 'Bulevardi 15, Helsinki 00120', 1234567899, '2021-04-16 04:05:06', 60.17, 24.93), 
-  (2, 'Ravintola Nerone', 'Italian, Pizza, Mediterranean', 'Pursimiehenkatu 27, Helsinki 00150', 1111111111, '2021-12-22 15:55:36', 60.17, 24.95),
-  (3, 'Shelter', 'European, Scandinavian', 'Kanavaranta 7, Helsinki 00160', 9999999999, '2022-01-01 13:07:12', 60.18, 24.93);
+  (1, 'Levant', 'Levant restaurants offers middle Eastern food ( Syrian/ Lebanese )', 'Bulevardi 15, Helsinki 00120', 1234567899, '2021-04-16 04:05:06', 60.17, 24.93, 0), 
+  (2, 'Ravintola Nerone', 'Italian, Pizza, Mediterranean', 'Pursimiehenkatu 27, Helsinki 00150', 1111111111, '2021-12-22 15:55:36', 60.17, 24.95, 0),
+  (3, 'Shelter', 'European, Scandinavian', 'Kanavaranta 7, Helsinki 00160', 9999999999, '2022-01-01 13:07:12', 60.18, 24.93, 0);
 
 SELECT setval(pg_get_serial_sequence('restaurants', 'id'), (SELECT MAX(id) from restaurants));
 
@@ -30,10 +30,3 @@ VALUES
   (3, 'alex', 'pbkdf2:sha256:260000$yfRtUjpV1tK39JWc$a52eaf9edbfe2a59d9e5619136121a39ab074a541f134472f354d5a1ef1aa34f', FALSE, '2022-05-13 12:56:02');
 
 SELECT setval(pg_get_serial_sequence('accounts', 'id'), (SELECT MAX(id) from accounts));
-
-INSERT INTO average_ratings (id, restaurant_id, average_rating)
-VALUES
-  (1, 1, 0),
-  (2, 2, 0),
-  (3, 3, 0);
-SELECT setval(pg_get_serial_sequence('average_ratings', 'id'), (SELECT MAX(id) from average_ratings));

@@ -20,6 +20,15 @@
         <input type="number" name="phone" minlength="9" maxlength="12" class="form-control" id="phone-input">
       </div>
 
+      <div class="col-md-6">
+        <label for="latitude-input" class="form-label">Koordinaatit leveysaste</label>
+        <input type="text" name="latitude" class="form-control" id="latitude-input">
+      </div>
+      <div class="col-md-6">
+        <label for="longitude-input" class="form-label">Koordinaatit pituusaste</label>
+        <input type="text" name="longitude" class="form-control" id="longitude-input">
+      </div>
+
       <input type="hidden" name="csrf_token" value="{{session.account.csrf_token}}">
 
       <div class="col-12">

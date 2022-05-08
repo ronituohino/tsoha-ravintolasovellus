@@ -28,24 +28,36 @@ def admin_create_restaurant():
         description = request.form["description"]
         address = request.form["address"]
         phone = request.form["phone"]
+        latitude = request.form["latitude"]
+        longitude = request.form["longitude"]
         made_at = datetime.now()
 
         # Validation
         v = validation.Validator()
         v.check(v.not_empty("nimi", name))
         v.check(v.has_length_less_than("nimi", name, 50))
+
         v.check(v.not_empty("kuvaus", description))
         v.check(v.has_length_less_than("kuvaus", description, 200))
+
         v.check(v.not_empty("osoite", address))
         v.check(v.has_length_less_than("osoite", address, 50))
+
         v.check(v.not_empty("puhelinnumero", phone))
         v.check(v.has_length_less_than("puhelinnumero", phone, 12))
+
+        v.check(v.not_empty("leveysaste", latitude))
+        v.check(v.has_length_less_than("leveysaste", latitude, 10))
+
+        v.check(v.not_empty("pituusaste", longitude))
+        v.check(v.has_length_less_than("pituusaste", longitude, 10))
+
         if v.has_errors():
             flash(str(v))
             return redirect("/create_restaurant")
 
-        sql = """INSERT INTO restaurants (name, description, address, phone, made_at) 
-                VALUES (:name, :description, :address, :phone, :made_at) RETURNING id"""
+        sql = """INSERT INTO restaurants (name, description, address, phone, made_at, latitude, longitude, average_rating) 
+                VALUES (:name, :description, :address, :phone, :made_at, :latitude, :longitude, :average_rating) RETURNING id"""
         result = db.session.execute(
             sql,
             {
@@ -54,6 +66,9 @@ def admin_create_restaurant():
                 "address": address,
                 "phone": phone,
                 "made_at": made_at,
+                "latitude": latitude,
+                "longitude": longitude,
+                "average_rating": 0,
             },
         )
         restaurant_id = result.fetchone()[0]

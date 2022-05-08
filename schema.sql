@@ -6,8 +6,9 @@ CREATE TABLE restaurants (
   address TEXT,
   phone TEXT,
   made_at TIMESTAMP,
-  coords_lat FLOAT,
-  coords_lon FLOAT
+  latitude FLOAT,
+  longitude FLOAT,
+  average_rating FLOAT
 );
 
 DROP TABLE IF EXISTS groups CASCADE;
@@ -40,11 +41,4 @@ CREATE TABLE ratings (
   restaurant_id INTEGER REFERENCES restaurants (id) ON DELETE CASCADE, 
   account_id INTEGER REFERENCES accounts (id) ON DELETE CASCADE,
   made_at TIMESTAMP 
-);
-
-DROP TABLE IF EXISTS average_ratings CASCADE;
-CREATE TABLE average_ratings (
-  id SERIAL PRIMARY KEY,
-  restaurant_id INTEGER REFERENCES restaurants,
-  average_rating FLOAT
 );

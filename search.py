@@ -9,7 +9,7 @@ def get_search_filter(has_search):
 
 def get_group_filter(has_groups):
     if has_groups:
-        return """R.id IN(SELECT restaurant_id FROM restaurant_group_connections 
+        return """id IN(SELECT restaurant_id FROM restaurant_group_connections 
                   WHERE group_id=ANY(:group_id_list) 
                   GROUP BY restaurant_id HAVING COUNT(*)=:group_count)"""
     return None

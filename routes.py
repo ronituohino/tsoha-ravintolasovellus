@@ -55,14 +55,17 @@ def index():
         get_search_filter(has_search),
         get_group_filter(has_groups),
     ]
-    parsed_filters = [f"AND {f}" for f in filters if f != None]
-    string = "".join(parsed_filters)
+    parsed_filters = [f for f in filters if f != None]
+    string = "AND".join(parsed_filters)
+    where_clause = ""
+    if len(string) > 0:
+        where_clause = "WHERE"
 
     # Connect filters and query the database
-    sql = f"""SELECT R.id, R.name, R.description, R.address, R.phone, A.average_rating 
-              FROM restaurants R, average_ratings A
-              WHERE A.restaurant_id=R.id {string} 
-              ORDER BY A.average_rating DESC"""
+    sql = f"""SELECT id, name, description, address, phone, average_rating 
+              FROM restaurants
+              {where_clause} {string} 
+              ORDER BY average_rating DESC"""
     result = db.session.execute(
         sql,
         {
@@ -82,6 +85,7 @@ def index():
         }
         for r in result.fetchall()
     ]
+    print(restaurants)
     restaurant_amount = len(restaurants)
     id_list = [r["id"] for r in restaurants]
 
