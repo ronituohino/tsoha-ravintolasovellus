@@ -56,7 +56,7 @@ def index():
         get_group_filter(has_groups),
     ]
     parsed_filters = [f for f in filters if f != None]
-    string = "AND".join(parsed_filters)
+    string = " AND ".join(parsed_filters)
     where_clause = ""
     if len(string) > 0:
         where_clause = "WHERE"

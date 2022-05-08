@@ -1,49 +1,105 @@
-{% extends "layout.html" %}
-{% block title %}Luo ravintola{% endblock %}
-{% block content %}
-  <div id="box-wrapper">
-    <form id="create_restaurant" action="/create_restaurant" method="post" class="row g-3">
-      <div class="col-12">
-        <label for="name-input" class="form-label">Nimi</label>
-        <input type="text" name="name" max="50" class="form-control" id="name-input">
-      </div>
-      <div class="col-12">
-        <label for="description-input" class="form-label">Kuvaus</label>
-        <textarea class="form-control" id="description-input" rows="2" name="description" max="200"></textarea>
-      </div>
-      <div class="col-md-6">
-        <label for="address-input" class="form-label">Osoite</label>
-        <input type="text" name="address" max="50" class="form-control" id="address-input">
-      </div>
-      <div class="col-md-6">
-        <label for="phone-input" class="form-label">Numero</label>
-        <input type="number" name="phone" minlength="9" maxlength="12" class="form-control" id="phone-input">
-      </div>
+{% extends "layout.html" %} {% block title %}Luo ravintola{% endblock
+%} {% block content %}
+<div id="box-wrapper">
+  <form
+    id="create_restaurant"
+    action="/create_restaurant"
+    method="post"
+    class="row g-3"
+  >
+    <div class="col-12">
+      <label for="name-input" class="form-label">Nimi</label>
+      <input
+        type="text"
+        name="name"
+        max="50"
+        class="form-control"
+        id="name-input"
+      />
+    </div>
+    <div class="col-12">
+      <label for="description-input" class="form-label">Kuvaus</label>
+      <textarea
+        class="form-control"
+        id="description-input"
+        rows="2"
+        name="description"
+        max="200"
+      ></textarea>
+    </div>
+    <div class="col-md-6">
+      <label for="address-input" class="form-label">Osoite</label>
+      <input
+        type="text"
+        name="address"
+        max="50"
+        class="form-control"
+        id="address-input"
+      />
+    </div>
+    <div class="col-md-6">
+      <label for="phone-input" class="form-label">Numero</label>
+      <input
+        type="number"
+        name="phone"
+        minlength="9"
+        maxlength="12"
+        class="form-control"
+        id="phone-input"
+      />
+    </div>
 
-      <div class="col-md-6">
-        <label for="latitude-input" class="form-label">Koordinaatit leveysaste</label>
-        <input type="text" name="latitude" class="form-control" id="latitude-input">
-      </div>
-      <div class="col-md-6">
-        <label for="longitude-input" class="form-label">Koordinaatit pituusaste</label>
-        <input type="text" name="longitude" class="form-control" id="longitude-input">
-      </div>
+    <div class="col-md-6">
+      <label for="latitude-input" class="form-label"
+        >Koordinaatit leveysaste</label
+      >
+      <input
+        type="text"
+        name="latitude"
+        class="form-control"
+        id="latitude-input"
+      />
+    </div>
+    <div class="col-md-6">
+      <label for="longitude-input" class="form-label"
+        >Koordinaatit pituusaste</label
+      >
+      <input
+        type="text"
+        name="longitude"
+        class="form-control"
+        id="longitude-input"
+      />
+    </div>
 
-      <input type="hidden" name="csrf_token" value="{{session.account.csrf_token}}">
+    <input
+      type="hidden"
+      name="csrf_token"
+      value="{{session.account.csrf_token}}"
+    />
 
-      <div class="col-12">
-        <label for="group-menu" class="form-label">Ryhmät</label>
-        <ul class="list-group" id="group-menu">
-          {% for group in groups %}
-            <label class="list-group-item">
-              <input class="form-check-input me-1" type="checkbox" name="groups" value="{{group.id}}">
-              {{group.name}}
-            </label>
-          {% endfor %}
-        </ul>
-      </div>
-      
-      <input class="btn btn-primary" type="submit" value="Luo ravintola">
-    </form>
-  </div>
+    <div class="col-12">
+      <label for="group-menu" class="form-label">Ryhmät</label>
+      <ul class="list-group" id="group-menu">
+        {% for group in groups %}
+        <label class="list-group-item">
+          <input
+            class="form-check-input me-1"
+            type="checkbox"
+            name="groups"
+            value="{{group.id}}"
+          />
+          {{group.name}}
+        </label>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <input
+      class="btn btn-primary"
+      type="submit"
+      value="Luo ravintola"
+    />
+  </form>
+</div>
 {% endblock %}

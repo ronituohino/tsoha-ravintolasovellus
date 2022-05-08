@@ -1,75 +1,155 @@
-{% extends "layout.html" %}
-{% block title %}{{restaurant.name}}{% endblock %}
-{% block content %}
-  <div id="box-wrapper">
+{% extends "layout.html" %} {% block title %}{{restaurant.name}}{% endblock %} {% block content %}
+<div id="box-wrapper">
     <div id="restaurant-box">
-      <h3>{{restaurant.name}}</h3>
-      <p>{{restaurant.description}}</p>
-      <div id="restaurant-contact">
-        <p class="text-muted"><small>{{restaurant.address}} | {{restaurant.phone}}</small></p>
-      </div>
-      <div id="restaurant-groups">
-        {% for group in restaurant_groups %}
-          {% if group.restaurant_id == restaurant.id %}
-            <span class="badge rounded-pill bg-primary">{{group.name}}</span>
-          {% endif %}
-        {% endfor %}
-      </div>
-  
-      {% if session.account and session.account.admin %}
-        <hr>
-        <form id="delete_restaurant_form" action="/delete_restaurant" method="post">
-          <input type="hidden" name="csrf_token" value="{{session.account.csrf_token}}">
-          <input type="hidden" name="restaurant_id" value="{{restaurant.id}}">
-          <input class="btn btn-primary" type="submit" value="Poista ravintola">
-        </form>
-      {% endif %}
-      
-      <hr>
-
-      <h4>Arvostelut</h4>
-      {% if session.account %}
-        <form id="rating_form" action="/give_rating" method="post" class="row g-3">
-          <div class="col-12">
-            <label for="rating-input" class="form-label">Arvostelu (1-5)</label>
-            <input class="form-control" id="rating-input" type="number" name="rating" min="1" max="5">
-          </div>
-          <div class="col-12">
-            <label for="comment-input" class="form-label">Kommentti (korkeintaan 200 kirjainta)</label>
-            <textarea class="form-control" id="comment-input" name="comment" rows="2" name="description" maxlength="200"></textarea>
-          </div>
-          <input type="hidden" name="csrf_token" value="{{session.account.csrf_token}}">
-          <input type="hidden" name="restaurant_id" value="{{restaurant.id}}">
-          <input class="btn btn-primary" type="submit" value="Julkaise">
-        </form>
-      {% else %}
-        <p>Kirjaudu sisään jättääksesi arvostelun!</p>
-      {% endif %}
-
-      {% for rating in ratings %}
-        <hr>
-        <div>
-          <div id="rating-header">
-            <h4>{{rating.rating}}</h4>
-            <div class="vr" style="width: 2px; height: 30px;"></div>
-            <h5>{{rating.username}}</h5>
-          </div>
-          
-          <p style="margin-top: 3px;">{{rating.comment}}</p>
-          <p class="text-muted" style="margin-top: -10px;"><small>{{rating.made_at}}</small></p>
-  
-          <div style="margin-top: -5px;">
-            {% if session.account and (session.account.admin or session.account.id == rating.account_id) %}
-              <form id="delete_rating_form" action="/delete_rating" method="post">
-                <input type="hidden" name="csrf_token" value="{{session.account.csrf_token}}">
-                <input type="hidden" name="restaurant_id" value="{{restaurant.id}}">
-                <input type="hidden" name="rating_id" value="{{rating.id}}">
-                <input class="btn btn-primary" type="submit" value="Poista arvostelu">
-              </form>
-            {% endif %}
-          </div>
+        <h3>{{restaurant.name}}</h3>
+        <p>{{restaurant.description}}</p>
+        <div id="restaurant-contact">
+            <p class="text-muted">
+                <small>{{restaurant.address}} | {{restaurant.phone}}</small>
+            </p>
         </div>
-      {% endfor %}
+        <div id="restaurant-groups">
+            {% for group in restaurant_groups %} {% if group.restaurant_id == restaurant.id %}
+            <span class="badge rounded-pill bg-primary">{{group.name}}</span
+      >
+      {% endif %} {% endfor %}
     </div>
-  </div>  
+
+    {% if session.account and session.account.admin %}
+    <hr />
+    <form
+      id="delete_restaurant_form"
+      action="/delete_restaurant"
+      method="post"
+    >
+      <input
+        type="hidden"
+        name="csrf_token"
+        value="{{session.account.csrf_token}}"
+      />
+      <input
+        type="hidden"
+        name="restaurant_id"
+        value="{{restaurant.id}}"
+      />
+      <input
+        class="btn btn-primary"
+        type="submit"
+        value="Poista ravintola"
+      />
+    </form>
+    {% endif %}
+
+    <hr />
+
+    <h4>Arvostelut</h4>
+    {% if session.account %}
+    <form
+      id="rating_form"
+      action="/give_rating"
+      method="post"
+      class="row g-3"
+      style="margin-right: 5px"
+    >
+      <div class="col-12">
+        <label for="rating-input" class="form-label"
+          >Arvostelu (1-5)</label
+        >
+        <input
+          class="form-control"
+          id="rating-input"
+          type="number"
+          name="rating"
+          min="1"
+          max="5"
+        />
+      </div>
+      <div class="col-12">
+        <label for="comment-input" class="form-label"
+          >Kommentti (korkeintaan 200 kirjainta)</label
+        >
+        <textarea
+          class="form-control"
+          id="comment-input"
+          name="comment"
+          rows="2"
+          name="description"
+          maxlength="200"
+        ></textarea>
+      </div>
+      <input
+        type="hidden"
+        name="csrf_token"
+        value="{{session.account.csrf_token}}"
+      />
+      <input
+        type="hidden"
+        name="restaurant_id"
+        value="{{restaurant.id}}"
+      />
+      <input
+        class="btn btn-primary col-2"
+        type="submit"
+        value="Julkaise"
+        style="margin-left: 8px"
+      />
+    </form>
+    {% else %}
+    <p>Kirjaudu sisään jättääksesi arvostelun!</p>
+    {% endif %} {% for rating in ratings %}
+    <hr />
+    <div>
+      <div
+        style="
+          display: flex;
+          flex-direction: row;
+          gap: 10px;
+          align-items: center;
+        "
+      >
+        <h4>{{rating.rating}}</h4>
+        <div class="vr" style="width: 2px; height: 30px"></div>
+        <h5>{{rating.username}}</h5>
+      </div>
+
+      <p style="margin-top: 3px">{{rating.comment}}</p>
+      <p class="text-muted" style="margin-top: -10px">
+        <small>{{rating.made_at}}</small>
+      </p>
+
+      <div style="margin-top: -5px">
+        {% if session.account and (session.account.admin or
+        session.account.id == rating.account_id) %}
+        <form
+          id="delete_rating_form"
+          action="/delete_rating"
+          method="post"
+        >
+          <input
+            type="hidden"
+            name="csrf_token"
+            value="{{session.account.csrf_token}}"
+          />
+          <input
+            type="hidden"
+            name="restaurant_id"
+            value="{{restaurant.id}}"
+          />
+          <input
+            type="hidden"
+            name="rating_id"
+            value="{{rating.id}}"
+          />
+          <input
+            class="btn btn-primary"
+            type="submit"
+            value="Poista arvostelu"
+          />
+        </form>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}

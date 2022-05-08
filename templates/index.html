@@ -1,33 +1,46 @@
-{% extends "layout.html" %}
-{% block title %}Etusivu{% endblock %}
-{% block content %}
-  <div id="box-wrapper">
-    <div id="restaurant-box" class="list-group">
-      {% for restaurant in restaurants %}
-        <a href="/restaurant/{{restaurant.id}}" class="list-group-item list-group-item-action">
-          <div style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-            <h3>{{restaurant.name}}</h3>
-            {% if restaurant.average_rating > 0 %}
-              <h4 class="text-muted">{{restaurant.average_rating}}</h4>  
-            {% endif %}
-          </div>
-          
-          <p>{{restaurant.description}}</p>
-          <div id="restaurant-contact">
-            <p class="text-muted"><small>{{restaurant.address}} | {{restaurant.phone}}</small></p>
-          </div>
-          <div id="restaurant-groups">
-            {% for group in restaurant_groups %}
-              {% if group.restaurant_id == restaurant.id %}
-                <span class="badge rounded-pill bg-primary">{{group.name}}</span>
-              {% endif %}
-            {% endfor %}
-          </div>
-        </a>
-      {% endfor %}
-      {% if restaurant_amount == 0 %}
-        <p style="align-self: center; margin-top: 10px;">Ravintoloita ei löytynyt!</p>
-      {% endif %}
-    </div>
+{% extends "layout.html" %} {% block title %}Etusivu{% endblock %} {%
+block content %}
+<div id="box-wrapper">
+  <div id="restaurant-box" class="list-group">
+    {% for restaurant in restaurants %}
+    <a
+      href="/restaurant/{{restaurant.id}}"
+      class="list-group-item list-group-item-action"
+    >
+      <div
+        style="
+          display: flex;
+          flex-direction: row;
+          gap: 10px;
+          align-items: center;
+        "
+      >
+        <h3>{{restaurant.name}}</h3>
+        {% if restaurant.average_rating > 0 %}
+        <h4 class="text-muted">{{restaurant.average_rating}}</h4>
+        {% endif %}
+      </div>
+
+      <p>{{restaurant.description}}</p>
+      <div id="restaurant-contact">
+        <p class="text-muted">
+          <small>{{restaurant.address}} | {{restaurant.phone}}</small>
+        </p>
+      </div>
+      <div id="restaurant-groups">
+        {% for group in restaurant_groups %} {% if group.restaurant_id
+        == restaurant.id %}
+        <span class="badge rounded-pill bg-primary"
+          >{{group.name}}</span
+        >
+        {% endif %} {% endfor %}
+      </div>
+    </a>
+    {% endfor %} {% if restaurant_amount == 0 %}
+    <p style="align-self: center; margin-top: 10px">
+      Ravintoloita ei löytynyt!
+    </p>
+    {% endif %}
   </div>
+</div>
 {% endblock %}

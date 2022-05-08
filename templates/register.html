@@ -1,23 +1,27 @@
 {% extends "layout.html" %}
 {% block title %}Rekisteröidy{% endblock %}
 {% block content %}
-  <div id="box-wrapper" style="display: flex; flex-direction: column;">
+  <div id="login-box"">
     <form action="/register" method="post" class="row g-3">
-      <div class="col-md-6">
+      <div>
         <label for="username-input" class="form-label">Käyttäjätunnus</label>
         <input type="text" name="username" class="form-control" id="username-input">
       </div>
-      <div class="col-md-6">
+      <div>
         <label for="password-input" class="form-label">Salasana</label>
         <input type="password" name="password1" class="form-control" id="password-input">
       </div>
-      <div class="col-md-6">
+      <div>
         <label for="password-input" class="form-label">Salasana uudestaan</label>
         <input type="password" name="password2" class="form-control" id="password-input">
       </div>
 
       <input class="btn btn-primary" type="submit" value="Luo tunnus">
     </form>
-    <p style="align-self: center; margin-top: 10px;">Jos sinulla on jo tunnus, voit kirjautua sisään <a href="/login">tästä</a></p>
+    <p style="
+        align-self: center; 
+        margin-top: 10px;">
+    Jos sinulla on jo tunnus, voit kirjautua sisään <a href="/login">tästä</a>
+    </p>
   </div>
 {% endblock %}

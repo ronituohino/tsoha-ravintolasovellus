@@ -1,19 +1,33 @@
-{% extends "layout.html" %}
-{% block title %}Kirjaudu{% endblock %}
-{% block content %}
-  <div id="box-wrapper" style="display: flex; flex-direction: column;">
-    <form action="/login" method="post" class="row g-3">
-      <div class="col-md-6">
-        <label for="username-input" class="form-label">Käyttäjätunnus</label>
-        <input type="text" name="username" class="form-control" id="username-input">
-      </div>
-      <div class="col-md-6">
-        <label for="password-input" class="form-label">Salasana</label>
-        <input type="password" name="password" class="form-control" id="password-input">
-      </div>
-  
-      <input class="btn btn-primary" type="submit" value="Kirjaudu">
-    </form>
-    <p style="align-self: center; margin-top: 10px;">Jos sinulla ei ole tunnusta, voit luoda uuden tunnuksen <a href="/register">tästä</a></p>
-  </div>
+{% extends "layout.html" %} {% block title %}Kirjaudu{% endblock %} {%
+block content %}
+<div id="login-box">
+  <form action="/login" method="post" class="row g-3">
+    <div>
+      <label for="username-input" class="form-label"
+        >Käyttäjätunnus</label
+      >
+      <input
+        type="text"
+        name="username"
+        class="form-control"
+        id="username-input"
+      />
+    </div>
+    <div>
+      <label for="password-input" class="form-label">Salasana</label>
+      <input
+        type="password"
+        name="password"
+        class="form-control"
+        id="password-input"
+      />
+    </div>
+
+    <input class="btn btn-primary" type="submit" value="Kirjaudu" />
+  </form>
+  <p style="align-self: center; margin-top: 10px">
+    Jos sinulla ei ole tunnusta, voit luoda uuden tunnuksen
+    <a href="/register">tästä</a>
+  </p>
+</div>
 {% endblock %}
