@@ -1,4 +1,5 @@
 from db import db
+from datetime import date, datetime
 from flask import session
 from werkzeug.security import check_password_hash, generate_password_hash
 from secrets import token_hex
@@ -32,8 +33,16 @@ def logout():
 def register(username, password):
     hash_value = generate_password_hash(password)
     try:
-        sql = "INSERT INTO accounts (username, password) VALUES (:username, :password)"
-        db.session.execute(sql, {"username": username, "password": hash_value})
+        sql = "INSERT INTO accounts (username, password, admin, made_at) VALUES (:username, :password, :admin, :made_at)"
+        db.session.execute(
+            sql,
+            {
+                "username": username,
+                "password": hash_value,
+                "admin": False,
+                "made_at": datetime.now(),
+            },
+        )
         db.session.commit()
     except:
         return False
