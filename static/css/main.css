@@ -7,13 +7,9 @@
 #box-wrapper {
   padding: 16px;
   background-color: white;
-  border-radius: 16px;
+  border-radius: 4px;
 }
 
-#no-restaurants-found {
-  align-self: center; 
-  margin-top: 10px;
-}
 
 #restaurant-box {
   margin: auto;
@@ -41,9 +37,7 @@
 }
 
 .navbar {
-  -webkit-border-radius: 16px;
-  -moz-border-radius: 16px;
-  border-radius: 16px;
+  border-radius: 4px;
 }
 
 
