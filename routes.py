@@ -55,8 +55,8 @@ def index():
         get_search_filter(has_search),
         get_group_filter(has_groups),
     ]
-    parsed_filters = [f for f in filters if f != None]
-    string = "AND".join(parsed_filters)
+    parsed_filters = [f"AND {f}" for f in filters if f != None]
+    string = "".join(parsed_filters)
 
     # Connect filters and query the database
     sql = f"""SELECT R.id, R.name, R.description, R.address, R.phone, A.average_rating 
