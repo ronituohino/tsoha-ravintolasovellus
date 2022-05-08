@@ -49,11 +49,14 @@
   <script>
     // Used to fix top bar group selection bug
     const checkBox = (e) => {
-      e.preventDefault()
-      e.stopPropagation()
-
       const inputElement = e.target.querySelector('input')
-      inputElement.checked = !inputElement.checked
+
+      if (inputElement) {
+        e.preventDefault()
+        e.stopPropagation()
+
+        inputElement.checked = !inputElement.checked
+      }
     }
   </script>
 
