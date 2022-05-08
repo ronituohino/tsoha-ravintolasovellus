@@ -11,7 +11,9 @@ Salasana: 12345
 
 ## Ravintolasovellus
 
-Sovelluksessa näkyy tietyn alueen ravintolat, joista voi etsiä tietoa ja lukea arvioita. Jokainen käyttäjä on peruskäyttäjä tai ylläpitäjä.
+Sovelluksessa näkyy kartta Helsingin alueen ravintoloista. Sovelluksessa on myös lista ravintoloista arvosteluiden mukaisessa järjestyksessä. Ravintoloita klikkaamalla pääsee sen omalle sivulle. Ravintolan omalla sivulla on lisätietoa ravintolasta, sekä arvostelu-osio.
+
+Sovellukseen pystyy luomaan käyttäjän. Jokainen käyttäjä on peruskäyttäjä tai ylläpitäjä. Peruskäyttäjä pystyy jättämään yhden arvostelun per ravintola. Peruskäyttäjä pystyy myös poistamaan oman arvostelun ravintolalta. Ylläpitäjä pystyy jättämään yhden arvostelun per ravintola. Ylläpitäjä pystyy poistamaan kenen tahansa arvostelun ravintolalta. Ylläpitäjä pystyy myös luomaan uusia ryhmiä ja ravintoloita sovellukseen.
 
 - [x] Käyttäjä voi kirjautua sisään ja ulos sekä luoda uuden tunnuksen
 - [x] Käyttäjä näkee ravintolat kartalla ja voi painaa ravintolasta, jolloin siitä näytetään lisää tietoa (kuten kuvaus ja aukioloajat)
