@@ -1,4 +1,3 @@
-from turtle import update
 import icon
 from app import app
 from db import db
